@@ -184,6 +184,7 @@ if (heroTitle) {
   letters.forEach((letter) => {
     letter.addEventListener('mouseenter', () => {
       if (letter.dataset.cooling === '1') return;
+      letter.classList.remove('is-cooling');
       const index = Number(letter.dataset.idx);
       const nextColor = pickColor(index);
       letter.style.color = nextColor;
@@ -193,6 +194,7 @@ if (heroTitle) {
     letter.addEventListener('mouseleave', () => {
       if (!letter.dataset.activeColor) return;
       letter.dataset.cooling = '1';
+      letter.classList.add('is-cooling');
       letter.style.color = '';
 
       const onEnd = (event) => {
@@ -200,11 +202,39 @@ if (heroTitle) {
         letter.removeEventListener('transitionend', onEnd);
         letter.dataset.activeColor = '';
         letter.dataset.cooling = '0';
+        letter.classList.remove('is-cooling');
       };
 
       letter.addEventListener('transitionend', onEnd);
     });
   });
+}
+
+const howSteps = document.querySelectorAll('#how .step');
+const howSection = document.querySelector('#how');
+
+if (howSection && howSteps.length) {
+  let flipPlayed = false;
+  const stepFlipObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || flipPlayed) return;
+        flipPlayed = true;
+        howSteps.forEach((step, index) => {
+          window.setTimeout(() => {
+            step.classList.add('is-flipping');
+            const clearFlipClass = () => {
+              step.classList.remove('is-flipping');
+            };
+            step.addEventListener('animationend', clearFlipClass, { once: true });
+          }, index * 180);
+        });
+        stepFlipObserver.unobserve(howSection);
+      });
+    },
+    { threshold: 0.72, rootMargin: "0px 0px -8% 0px" }
+  );
+  stepFlipObserver.observe(howSection);
 }
 
 function animateCount(node) {
