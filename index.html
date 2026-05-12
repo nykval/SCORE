@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCORE — бронирование спорта без звонков</title>
+  <meta name="description" content="SCORE — единая платформа для поиска игроков, бронирования площадок и организации матчей.">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon-s.svg">
+  <link rel="shortcut icon" type="image/svg+xml" href="./assets/favicon-s.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="bg-orb orb-a" aria-hidden="true"></div>
+  <div class="bg-orb orb-b" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="logo" href="#top">SC<span>O</span>RE</a>
+    <nav class="menu">
+      <a href="#how">Как это работает</a>
+      <a href="#places">Площадки</a>
+      <a href="#for-whom">Для кого</a>
+      <a href="#app">Приложение</a>
+    </nav>
+    <a class="btn btn-outline" href="#app">Скачать</a>
+  </header>
+
+  <main id="top">
+    <section class="hero section">
+      <div class="hero-copy reveal">
+        <p class="tagline">Платформа для любительского спорта</p>
+        <h1 class="hero-title">Все площадки,<br>игроки и<br>бронирование в<br>одном месте</h1>
+        <p class="lead">SCORE помогает за пару минут найти матч, собрать состав, оплатить участие и выйти на площадку без бесконечных чатов и звонков.</p>
+      </div>
+
+      <div class="hero-visual reveal delay-1" aria-label="Логотип SCORE">
+        <div class="score-logo" role="img" aria-label="SCORE">
+          <span class="score-letter letter-s">S</span>
+          <span class="score-letter letter-c">C</span>
+          <button class="score-object" type="button" aria-label="Спортивный объект в логотипе SCORE" data-logo-object>
+            <img class="score-object-img is-active" src="./assets/logo-objects/object-1.png" alt="Футбольный мяч">
+            <img class="score-object-img" src="./assets/logo-objects/object-2.png" alt="">
+          </button>
+          <span class="score-letter letter-r">R</span>
+          <span class="score-letter letter-e">E</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker section">
+      <div class="ticker-track">
+        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+      </div>
+    </section>
+
+    <section id="how" class="section reveal how-panel">
+      <div class="section-head">
+        <p class="eyebrow">Как это работает</p>
+        <h2>Три шага от идеи до игры</h2>
+      </div>
+      <div class="steps">
+        <article class="step tilt">
+          <span>01</span>
+          <h3>Выбирайте</h3>
+          <p>Фильтруйте площадки и игры по времени, локации, покрытию и уровню.</p>
+        </article>
+        <article class="step tilt">
+          <span>02</span>
+          <h3>Бронируйте</h3>
+          <p>Подтверждайте участие и оплачивайте долю внутри приложения без переводов в чатах.</p>
+        </article>
+        <article class="step tilt">
+          <span>03</span>
+          <h3>Играйте</h3>
+          <p>Получайте напоминания, рейтинг матча и историю своих активностей.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="places" class="section reveal">
+      <div class="section-head">
+        <p class="eyebrow">Популярное</p>
+        <h2>Площадки и форматы рядом</h2>
+      </div>
+      <div class="cards-grid">
+        <article class="place-card tilt"><h3>Футбол 5×5</h3><p>От 1 750 ₽ • 72 площадки</p></article>
+        <article class="place-card tilt"><h3>Падел</h3><p>От 2 300 ₽ • 21 площадка</p></article>
+        <article class="place-card tilt"><h3>Теннис</h3><p>От 1 400 ₽ • 94 площадки</p></article>
+        <article class="place-card tilt"><h3>Баскетбол</h3><p>От 1 200 ₽ • 56 площадок</p></article>
+        <article class="place-card tilt"><h3>Волейбол</h3><p>От 1 100 ₽ • 38 площадок</p></article>
+        <article class="place-card tilt"><h3>Хоккей</h3><p>От 2 800 ₽ • 17 площадок</p></article>
+      </div>
+    </section>
+
+    <section id="for-whom" class="section reveal">
+      <div class="section-head">
+        <p class="eyebrow">Для кого</p>
+        <h2>Единый сценарий для игроков и площадок</h2>
+      </div>
+      <div class="audience">
+        <article class="aud-card tilt">
+          <h3>Игрокам</h3>
+          <ul>
+            <li>Поиск матча под уровень и время</li>
+            <li>Создание игры за 1 минуту</li>
+            <li>Рейтинг игроков и прогресс</li>
+            <li>История всех матчей</li>
+          </ul>
+          <a href="#app">Перейти в приложение</a>
+        </article>
+        <article class="aud-card tilt">
+          <h3>Площадкам</h3>
+          <ul>
+            <li>Онлайн-бронирование без звонков</li>
+            <li>Заполнение «пустых часов»</li>
+            <li>Автоматизация расписания</li>
+            <li>Аналитика спроса и загрузки</li>
+          </ul>
+          <a href="#app">Стать партнёром</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="numbers">
+        <article><p class="num" data-count="80">0</p><span>% ручной организации убираем автоматизацией</span></article>
+        <article><p class="num" data-count="5">0</p><span>минут от идеи до готовой игры</span></article>
+        <article><p class="num" data-count="1000">0</p><span>площадок в цели развития</span></article>
+      </div>
+    </section>
+
+    <section id="app" class="section app-cta reveal">
+      <div>
+        <p class="eyebrow">SCORE App</p>
+        <h2>Скачайте приложение и бронируйте спорт в пару кликов</h2>
+        <p>Пока MVP готовится к запуску, можно оставить заявку на ранний доступ.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-solid" href="mailto:aiskorokirzha@edu.hse.ru">Ранний доступ</a>
+        <a class="btn btn-outline" href="mailto:aiskorokirzha@edu.hse.ru">Для площадок</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© SCORE, 2026</p>
+    <p>Founder: Скорокиржа Александр • aiskorokirzha@edu.hse.ru</p>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
