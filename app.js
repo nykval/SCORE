@@ -11,19 +11,6 @@ const revealObserver = new IntersectionObserver(
 
 document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
-const countObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      animateCount(entry.target);
-      countObserver.unobserve(entry.target);
-    });
-  },
-  { threshold: 0.8 }
-);
-
-document.querySelectorAll('[data-count]').forEach((el) => countObserver.observe(el));
-
 const logoObject = document.querySelector('[data-logo-object]');
 
 if (logoObject) {
@@ -67,15 +54,16 @@ if (logoObject) {
 
     if (instant) {
       logoObject.classList.add('is-instant');
-      activeLayer.classList.remove('is-active', 'is-exit', 'is-enter');
+      activeLayer.classList.remove('is-active', 'is-enter', 'is-exit');
       activeLayer.classList.add('is-hidden-now');
-      passiveLayer.classList.remove('is-exit', 'is-enter', 'is-hidden-now');
+      passiveLayer.classList.remove('is-enter', 'is-exit', 'is-hidden-now');
       passiveLayer.classList.add('is-active');
 
       const prevLayer = activeLayer;
       activeLayer = passiveLayer;
       passiveLayer = prevLayer;
       passiveLayer.classList.remove('is-active', 'is-enter', 'is-exit');
+      passiveLayer.classList.add('is-hidden-now');
       passiveLayer.alt = '';
 
       currentIndex = nextIndex;
@@ -97,14 +85,15 @@ if (logoObject) {
       if (event.target !== passiveLayer || event.propertyName !== 'opacity') return;
       passiveLayer.removeEventListener('transitionend', onFinish);
 
-      activeLayer.classList.remove('is-active', 'is-exit', 'is-hidden-now', 'is-enter');
+      activeLayer.classList.remove('is-active', 'is-enter', 'is-exit', 'is-hidden-now');
       passiveLayer.classList.remove('is-enter');
       passiveLayer.classList.add('is-active');
 
       const prevLayer = activeLayer;
       activeLayer = passiveLayer;
       passiveLayer = prevLayer;
-      passiveLayer.classList.remove('is-active', 'is-enter', 'is-exit', 'is-hidden-now');
+      passiveLayer.classList.remove('is-active', 'is-enter', 'is-exit');
+      passiveLayer.classList.add('is-hidden-now');
       passiveLayer.alt = '';
 
       currentIndex = nextIndex;
@@ -127,88 +116,134 @@ if (logoObject) {
   scheduleRotation();
 }
 
-const heroTitle = document.querySelector('.hero-title');
+const palette = ['#3a85fd', '#e82644', '#74eb89', '#fcc005'];
+const interactiveGroups = document.querySelectorAll('.hero-title-main, .hero-title-accent');
+const allInteractiveLetters = [];
 
-if (heroTitle) {
-  const palette = ['#3a85fd', '#e82644', '#74eb89', '#fcc005'];
-  const lineChunks = heroTitle.innerHTML.split('<br>');
-  const letters = [];
+interactiveGroups.forEach((group) => {
+  const original = group.innerHTML;
+  const chunks = original.split('<br>');
+  group.innerHTML = '';
 
-  heroTitle.innerHTML = '';
+  chunks.forEach((chunk, chunkIndex) => {
+    const line = document.createElement('span');
+    line.className = 'hero-line';
 
-  lineChunks.forEach((chunk, lineIndex) => {
-    for (const ch of chunk) {
-      if (ch === ' ') {
-        heroTitle.appendChild(document.createTextNode(' '));
+    for (const char of chunk) {
+      if (char === ' ') {
+        line.appendChild(document.createTextNode(' '));
         continue;
       }
-
       const span = document.createElement('span');
       span.className = 'hero-letter';
-      span.textContent = ch;
-      span.dataset.idx = String(letters.length);
-      span.dataset.cooling = '0';
+      span.textContent = char;
+      span.dataset.idx = String(allInteractiveLetters.length);
       span.dataset.activeColor = '';
-      letters.push(span);
-      heroTitle.appendChild(span);
+      allInteractiveLetters.push(span);
+      line.appendChild(span);
     }
+    group.appendChild(line);
 
-    if (lineIndex < lineChunks.length - 1) {
-      heroTitle.appendChild(document.createElement('br'));
+    if (chunkIndex < chunks.length - 1) {
+      group.appendChild(document.createElement('br'));
     }
   });
+});
 
-  function colorAt(index) {
-    if (index < 0 || index >= letters.length) return '';
-    return letters[index].dataset.activeColor || '';
-  }
-
-  function createsTriple(index, color) {
-    return (
-      (colorAt(index - 2) === color && colorAt(index - 1) === color) ||
-      (colorAt(index - 1) === color && colorAt(index + 1) === color) ||
-      (colorAt(index + 1) === color && colorAt(index + 2) === color)
-    );
-  }
-
-  function pickColor(index) {
-    const shuffled = [...palette].sort(() => Math.random() - 0.5);
-    for (const candidate of shuffled) {
-      if (!createsTriple(index, candidate)) {
-        return candidate;
-      }
-    }
-    return shuffled[0];
-  }
-
-  letters.forEach((letter) => {
-    letter.addEventListener('mouseenter', () => {
-      if (letter.dataset.cooling === '1') return;
-      letter.classList.remove('is-cooling');
-      const index = Number(letter.dataset.idx);
-      const nextColor = pickColor(index);
-      letter.style.color = nextColor;
-      letter.dataset.activeColor = nextColor;
-    });
-
-    letter.addEventListener('mouseleave', () => {
-      if (!letter.dataset.activeColor) return;
-      letter.dataset.cooling = '1';
-      letter.classList.add('is-cooling');
-      letter.style.color = '';
-
-      const onEnd = (event) => {
-        if (event.propertyName !== 'color') return;
-        letter.removeEventListener('transitionend', onEnd);
-        letter.dataset.activeColor = '';
-        letter.dataset.cooling = '0';
-        letter.classList.remove('is-cooling');
-      };
-
-      letter.addEventListener('transitionend', onEnd);
-    });
-  });
+function colorAt(index) {
+  if (index < 0 || index >= allInteractiveLetters.length) return '';
+  return allInteractiveLetters[index].dataset.activeColor || '';
 }
+
+function createsTriple(index, color) {
+  return (
+    (colorAt(index - 2) === color && colorAt(index - 1) === color) ||
+    (colorAt(index - 1) === color && colorAt(index + 1) === color) ||
+    (colorAt(index + 1) === color && colorAt(index + 2) === color)
+  );
+}
+
+function pickColor(index) {
+  const shuffled = [...palette].sort(() => Math.random() - 0.5);
+  for (const candidate of shuffled) {
+    if (!createsTriple(index, candidate)) return candidate;
+  }
+  return shuffled[0];
+}
+
+const letterResetTimers = new WeakMap();
+let easterBallNode = null;
+let easterBallRunning = false;
+let easterBallLastRun = 0;
+
+function getEasterBallNode() {
+  if (easterBallNode) return easterBallNode;
+  const ball = document.createElement('div');
+  ball.className = 'easter-ball';
+  ball.setAttribute('aria-hidden', 'true');
+  ball.innerHTML = '<img src="./assets/logo-objects/object-1.png" alt="">';
+  document.body.appendChild(ball);
+  easterBallNode = ball;
+  return easterBallNode;
+}
+
+function triggerEasterBall() {
+  const now = Date.now();
+  if (easterBallRunning || now - easterBallLastRun < 1800) return;
+
+  const ball = getEasterBallNode();
+  easterBallRunning = true;
+  easterBallLastRun = now;
+  ball.classList.remove('is-running');
+  void ball.offsetWidth;
+  ball.classList.add('is-running');
+
+  const finish = () => {
+    ball.classList.remove('is-running');
+    easterBallRunning = false;
+    ball.removeEventListener('animationend', finish);
+  };
+
+  ball.addEventListener('animationend', finish);
+}
+
+allInteractiveLetters.forEach((letter) => {
+  letter.addEventListener('mouseenter', () => {
+    if (letter.classList.contains('is-lit')) return;
+
+    const oldTimer = letterResetTimers.get(letter);
+    if (oldTimer) {
+      window.clearTimeout(oldTimer);
+      letterResetTimers.delete(letter);
+    }
+
+    letter.classList.remove('is-resetting');
+    const index = Number(letter.dataset.idx);
+    const nextColor = pickColor(index);
+    letter.style.color = nextColor;
+    letter.dataset.activeColor = nextColor;
+    letter.classList.add('is-lit');
+
+    const isAllPainted = allInteractiveLetters.length > 0
+      && allInteractiveLetters.every((item) => item.dataset.activeColor);
+    if (isAllPainted) {
+      triggerEasterBall();
+    }
+
+    const timerId = window.setTimeout(() => {
+      letter.classList.add('is-resetting');
+      letter.classList.remove('is-lit');
+      letter.style.color = '';
+      letter.dataset.activeColor = '';
+      window.setTimeout(() => {
+        letter.classList.remove('is-resetting');
+      }, 0);
+      letterResetTimers.delete(letter);
+    }, 7000);
+
+    letterResetTimers.set(letter, timerId);
+  });
+});
 
 const howSteps = document.querySelectorAll('#how .step');
 const howSection = document.querySelector('#how');
@@ -223,33 +258,15 @@ if (howSection && howSteps.length) {
         howSteps.forEach((step, index) => {
           window.setTimeout(() => {
             step.classList.add('is-flipping');
-            const clearFlipClass = () => {
-              step.classList.remove('is-flipping');
-            };
-            step.addEventListener('animationend', clearFlipClass, { once: true });
+            step.addEventListener('animationend', () => step.classList.remove('is-flipping'), { once: true });
           }, index * 180);
         });
         stepFlipObserver.unobserve(howSection);
       });
     },
-    { threshold: 0.72, rootMargin: "0px 0px -8% 0px" }
+    { threshold: 0.72, rootMargin: '0px 0px -8% 0px' }
   );
   stepFlipObserver.observe(howSection);
-}
-
-function animateCount(node) {
-  const target = Number(node.dataset.count || 0);
-  const duration = 1100;
-  const start = performance.now();
-
-  function frame(time) {
-    const p = Math.min(1, (time - start) / duration);
-    const eased = 1 - Math.pow(1 - p, 3);
-    node.textContent = Math.floor(target * eased);
-    if (p < 1) requestAnimationFrame(frame);
-  }
-
-  requestAnimationFrame(frame);
 }
 
 const tiltCards = document.querySelectorAll('.tilt');
@@ -268,3 +285,151 @@ tiltCards.forEach((card) => {
     card.style.transform = '';
   });
 });
+
+const productSwitch = document.querySelector('.product-switch');
+const productTabs = document.querySelectorAll('[data-product-tab]');
+const productViews = document.querySelectorAll('[data-product-view]');
+
+function setProductView(viewName) {
+  productTabs.forEach((tab) => {
+    const isActive = tab.dataset.productTab === viewName;
+    tab.classList.toggle('is-active', isActive);
+    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  productViews.forEach((view) => {
+    const isActive = view.dataset.productView === viewName;
+    view.classList.toggle('is-active', isActive);
+  });
+
+  if (productSwitch) {
+    productSwitch.classList.toggle('is-crm', viewName === 'crm');
+  }
+}
+
+productTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.productTab || 'play';
+    setProductView(target);
+  });
+});
+
+const modal = document.querySelector('[data-form-modal]');
+const openFormButtons = document.querySelectorAll('[data-open-form]');
+const closeFormButtons = document.querySelectorAll('[data-close-form]');
+const form = document.querySelector('[data-join-form]');
+const roleInput = document.querySelector('[data-role-input]');
+const roleOptions = document.querySelectorAll('[data-role-option]');
+const formFields = document.querySelector('[data-form-fields]');
+const formSuccess = document.querySelector('[data-form-success]');
+const statusLine = document.querySelector('[data-form-status]');
+
+const TELEGRAM_TOKEN = '8894708408:AAHPDAjuOHEIBTSvFJzG8821pT4vGwTGhOA';
+const TELEGRAM_CHAT_ID = '1066193932';
+
+function setRole(roleValue) {
+  if (roleInput) roleInput.value = roleValue;
+  roleOptions.forEach((option) => {
+    option.classList.toggle('is-active', option.dataset.roleOption === roleValue);
+  });
+}
+
+function resetFormView() {
+  if (formFields) formFields.hidden = false;
+  if (formSuccess) formSuccess.hidden = true;
+  if (statusLine) statusLine.textContent = '';
+}
+
+function openForm(role = '') {
+  if (!modal) return;
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  resetFormView();
+  setRole(role || 'Игрок');
+}
+
+function closeForm() {
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.style.overflow = '';
+}
+
+openFormButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    openForm(button.dataset.openForm || 'Игрок');
+  });
+});
+
+closeFormButtons.forEach((button) => {
+  button.addEventListener('click', closeForm);
+});
+
+roleOptions.forEach((option) => {
+  option.addEventListener('click', () => {
+    setRole(option.dataset.roleOption || 'Игрок');
+  });
+});
+
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && modal && !modal.hidden) {
+    closeForm();
+  }
+});
+
+if (form) {
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    const role = String(formData.get('role') || '').trim();
+    const name = String(formData.get('name') || '').trim();
+    const contact = String(formData.get('contact') || '').trim();
+    const message = String(formData.get('message') || '').trim();
+
+    if (statusLine) statusLine.textContent = 'Отправляем форму...';
+    if (submitButton) submitButton.disabled = true;
+
+    const text = [
+      'Новая заявка SCORE',
+      '',
+      `Кто вы: ${role || 'Не указано'}`,
+      `Имя: ${name}`,
+      `Контакт: ${contact}`,
+      `Сообщение: ${message || '-'}`
+    ].join('\n');
+
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Telegram response: ${response.status}`);
+      }
+
+      if (formFields) formFields.hidden = true;
+      if (formSuccess) formSuccess.hidden = false;
+      if (statusLine) statusLine.textContent = '';
+
+      window.setTimeout(() => {
+        closeForm();
+        form.reset();
+        setRole('Игрок');
+        resetFormView();
+      }, 2000);
+    } catch (error) {
+      if (statusLine) {
+        statusLine.textContent = 'Не удалось отправить форму. Попробуйте еще раз.';
+      }
+      console.error(error);
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
