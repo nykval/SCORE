@@ -18,12 +18,13 @@
 
   <header class="topbar">
     <a class="logo" href="#top">SC<span>O</span>RE</a>
-    <nav class="menu">
+    <nav class="menu" id="topbar-menu">
       <a href="#how">Как это работает</a>
       <a href="#flow">Сценарий</a>
       <a href="#products">Продукты</a>
       <a href="#join">Контакты</a>
     </nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="topbar-menu" data-menu-toggle>Меню</button>
     <a class="btn btn-outline" href="#join">Скачать</a>
   </header>
 
@@ -215,7 +216,7 @@
 
     <section id="join" class="section join-cta reveal">
       <p class="eyebrow">Готовы войти в игру?</p>
-      <h2>Присоединяйтесь к SCORE</h2>
+      <h2>Присоединяйтесь к <span class="join-brand-score">SCORE</span></h2>
       <p class="join-text">Оставьте заявку, и мы свяжемся с вами. Обсудим ранний доступ или подключение площадки к экосистеме SCORE.</p>
       <div class="join-actions">
         <button class="btn btn-light" type="button" data-open-form="Игрок">Игрок · играть</button>

@@ -11,6 +11,48 @@ const revealObserver = new IntersectionObserver(
 
 document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
+const topbar = document.querySelector('.topbar');
+const menuToggleButton = document.querySelector('[data-menu-toggle]');
+const topbarMenuLinks = document.querySelectorAll('.topbar .menu a');
+const mobileMenuQuery = window.matchMedia('(max-width: 760px)');
+
+function closeTopbarMenu() {
+  if (!topbar || !menuToggleButton) return;
+  topbar.classList.remove('is-menu-open');
+  menuToggleButton.setAttribute('aria-expanded', 'false');
+}
+
+if (topbar && menuToggleButton) {
+  menuToggleButton.addEventListener('click', () => {
+    const isOpen = topbar.classList.toggle('is-menu-open');
+    menuToggleButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  topbarMenuLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeTopbarMenu();
+    });
+  });
+
+  const onViewportChange = (event) => {
+    if (!event.matches) {
+      closeTopbarMenu();
+    }
+  };
+
+  if (typeof mobileMenuQuery.addEventListener === 'function') {
+    mobileMenuQuery.addEventListener('change', onViewportChange);
+  } else if (typeof mobileMenuQuery.addListener === 'function') {
+    mobileMenuQuery.addListener(onViewportChange);
+  }
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileMenuQuery.matches && topbar.classList.contains('is-menu-open')) {
+      closeTopbarMenu();
+    }
+  });
+}
+
 const logoObject = document.querySelector('[data-logo-object]');
 
 if (logoObject) {
