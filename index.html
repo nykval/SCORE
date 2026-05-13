@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SCORE — бронирование спорта без звонков</title>
   <meta name="description" content="SCORE — единая платформа для поиска игроков, бронирования площадок и организации матчей.">
-  <link rel="icon" type="image/svg+xml" href="./assets/favicon-s.svg">
-  <link rel="shortcut icon" type="image/svg+xml" href="./assets/favicon-s.svg">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon-s.svg?v=20260513-13">
+  <link rel="shortcut icon" type="image/svg+xml" href="./assets/favicon-s.svg?v=20260513-13">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20260513-13">
 </head>
 <body>
   <div class="bg-orb orb-a" aria-hidden="true"></div>
@@ -20,19 +20,25 @@
     <a class="logo" href="#top">SC<span>O</span>RE</a>
     <nav class="menu">
       <a href="#how">Как это работает</a>
-      <a href="#places">Площадки</a>
-      <a href="#for-whom">Для кого</a>
-      <a href="#app">Приложение</a>
+      <a href="#flow">Сценарий</a>
+      <a href="#products">Продукты</a>
+      <a href="#join">Контакты</a>
     </nav>
-    <a class="btn btn-outline" href="#app">Скачать</a>
+    <a class="btn btn-outline" href="#join">Скачать</a>
   </header>
 
   <main id="top">
     <section class="hero section">
       <div class="hero-copy reveal">
         <p class="tagline">Платформа для любительского спорта</p>
-        <h1 class="hero-title">Все площадки,<br>игроки и<br>бронирование в<br>одном месте</h1>
+        <h1 class="hero-title">
+          <span class="hero-title-main">Все площадки,<br>игроки и<br>бронирование в<br>одном месте</span>
+        </h1>
         <p class="lead">SCORE помогает за пару минут найти матч, собрать состав, оплатить участие и выйти на площадку без бесконечных чатов и звонков.</p>
+        <div class="hero-actions" aria-label="Основные действия">
+          <button class="btn btn-solid" type="button" data-open-form="Игрок">Получить ранний доступ</button>
+          <a class="btn btn-outline" href="#products">Посмотреть продукт</a>
+        </div>
       </div>
 
       <div class="hero-visual reveal delay-1" aria-label="Логотип SCORE">
@@ -49,11 +55,20 @@
       </div>
     </section>
 
-    <section class="ticker section">
-      <div class="ticker-track">
-        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
-        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
-        <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+    <section class="ticker-stack section" aria-label="Бегущие строки SCORE">
+      <div class="ticker ticker--blue" aria-label="Виды спорта">
+        <div class="ticker-track">
+          <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+          <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+          <span>Падел</span><span>Волейбол</span><span>Баскетбол</span><span>Хоккей</span><span>Сквош</span><span>Футбол</span><span>Теннис</span>
+        </div>
+      </div>
+
+      <div class="ticker ticker--green" aria-label="Функции платформы SCORE">
+        <div class="ticker-track">
+          <span>Поиск игр за 30 секунд</span><span>Сплит-оплата внутри приложения</span><span>AI-аналитика загрузки площадок</span><span>Создание игры за 1 минуту</span><span>Автоподбор игроков по уровню</span><span>Поиск площадок рядом</span><span>Управление командой</span><span>Уведомления и подтверждения участия</span><span>Рейтинг игроков и матчей</span><span>AI-рекомендации для площадок</span><span>Заполнение “пустых часов”</span><span>Единый профиль игрока</span><span>История игр и статистика</span><span>Быстрый поиск партнёров по спорту</span><span>Автоматизация расписания площадок</span><span>Онлайн-организация матчей</span><span>Избранные площадки и игры</span><span>Система заявок и подтверждений</span><span>Поиск игр по времени и локации</span><span>Цифровая экосистема для спорта</span><span>Аналитика спроса и загрузки</span><span>Управление спортивным комьюнити</span><span>Умный подбор спортивных сценариев</span><span>Multi-sport платформа</span><span>Все спортивные сценарии в одном сервисе</span>
+          <span>Поиск игр за 30 секунд</span><span>Сплит-оплата внутри приложения</span><span>AI-аналитика загрузки площадок</span><span>Создание игры за 1 минуту</span><span>Автоподбор игроков по уровню</span><span>Поиск площадок рядом</span><span>Управление командой</span><span>Уведомления и подтверждения участия</span><span>Рейтинг игроков и матчей</span><span>AI-рекомендации для площадок</span><span>Заполнение “пустых часов”</span><span>Единый профиль игрока</span><span>История игр и статистика</span><span>Быстрый поиск партнёров по спорту</span><span>Автоматизация расписания площадок</span><span>Онлайн-организация матчей</span><span>Избранные площадки и игры</span><span>Система заявок и подтверждений</span><span>Поиск игр по времени и локации</span><span>Цифровая экосистема для спорта</span><span>Аналитика спроса и загрузки</span><span>Управление спортивным комьюнити</span><span>Умный подбор спортивных сценариев</span><span>Multi-sport платформа</span><span>Все спортивные сценарии в одном сервисе</span>
+        </div>
       </div>
     </section>
 
@@ -81,76 +96,183 @@
       </div>
     </section>
 
-    <section id="places" class="section reveal">
+    <section id="flow" class="section reveal flow-panel">
       <div class="section-head">
-        <p class="eyebrow">Популярное</p>
-        <h2>Площадки и форматы рядом</h2>
+        <p class="eyebrow">Сценарий SCORE</p>
+        <h2>Один сценарий для игроков, организаторов и площадок</h2>
       </div>
-      <div class="cards-grid">
-        <article class="place-card tilt"><h3>Футбол 5×5</h3><p>От 1 750 ₽ • 72 площадки</p></article>
-        <article class="place-card tilt"><h3>Падел</h3><p>От 2 300 ₽ • 21 площадка</p></article>
-        <article class="place-card tilt"><h3>Теннис</h3><p>От 1 400 ₽ • 94 площадки</p></article>
-        <article class="place-card tilt"><h3>Баскетбол</h3><p>От 1 200 ₽ • 56 площадок</p></article>
-        <article class="place-card tilt"><h3>Волейбол</h3><p>От 1 100 ₽ • 38 площадок</p></article>
-        <article class="place-card tilt"><h3>Хоккей</h3><p>От 2 800 ₽ • 17 площадок</p></article>
-      </div>
-    </section>
-
-    <section id="for-whom" class="section reveal">
-      <div class="section-head">
-        <p class="eyebrow">Для кого</p>
-        <h2>Единый сценарий для игроков и площадок</h2>
-      </div>
-      <div class="audience">
-        <article class="aud-card tilt">
-          <h3>Игрокам</h3>
-          <ul>
-            <li>Поиск матча под уровень и время</li>
-            <li>Создание игры за 1 минуту</li>
-            <li>Рейтинг игроков и прогресс</li>
-            <li>История всех матчей</li>
+      <div class="scenario-grid">
+        <article class="scenario-card tilt">
+          <p class="scenario-topline">Игрок</p>
+          <h3>Находи игру</h3>
+          <p class="scenario-lead">Матч под твой уровень, время и район — за пару кликов.</p>
+          <ul class="scenario-points">
+            <li>Игры по уровню, времени и локации</li>
+            <li>Понятная цена и состав до записи</li>
+            <li>Бронь и участие в одном сценарии</li>
+            <li>История матчей и рейтинг игроков</li>
           </ul>
-          <a href="#app">Перейти в приложение</a>
+          <div class="scenario-bottom">
+            <strong>&lt; 30 сек</strong>
+            <span>до выбора подходящей игры</span>
+          </div>
         </article>
-        <article class="aud-card tilt">
-          <h3>Площадкам</h3>
-          <ul>
-            <li>Онлайн-бронирование без звонков</li>
-            <li>Заполнение «пустых часов»</li>
-            <li>Автоматизация расписания</li>
+
+        <article class="scenario-card scenario-card-featured tilt">
+          <p class="scenario-topline">Организатор</p>
+          <h3>Создавай игры</h3>
+          <p class="scenario-lead">Собирай команду, подтверждай участие без потери игроков</p>
+          <ul class="scenario-points">
+            <li>Автосбор состава и лист ожидания</li>
+            <li>Контроль заявок и участников</li>
+            <li>Оплаты без ручных напоминаний</li>
+            <li>Замены и отмены без лишней переписки</li>
+          </ul>
+          <div class="scenario-bottom">
+            <strong>−2 часа</strong>
+            <span>рутины в неделю</span>
+          </div>
+        </article>
+
+        <article class="scenario-card tilt">
+          <p class="scenario-topline">Площадка</p>
+          <h3>Заполняй слоты</h3>
+          <p class="scenario-lead">Площадки получают новый канал продаж и меньше ручной координации.</p>
+          <ul class="scenario-points">
+            <li>Заполнение свободных часов</li>
+            <li>Подтверждённые брони и предоплата</li>
+            <li>Единый календарь расписания</li>
             <li>Аналитика спроса и загрузки</li>
           </ul>
-          <a href="#app">Стать партнёром</a>
+          <div class="scenario-bottom">
+            <strong>+30%</strong>
+            <span>к загрузке свободных слотов</span>
+          </div>
         </article>
       </div>
     </section>
 
-    <section class="section reveal">
-      <div class="numbers">
-        <article><p class="num" data-count="80">0</p><span>% ручной организации убираем автоматизацией</span></article>
-        <article><p class="num" data-count="5">0</p><span>минут от идеи до готовой игры</span></article>
-        <article><p class="num" data-count="1000">0</p><span>площадок в цели развития</span></article>
+    <section id="products" class="section reveal products-section">
+      <div class="section-head products-head">
+        <p class="eyebrow">Продукт</p>
+        <h2>Два продукта - одна экосистема</h2>
+        <p class="products-lead">Приложение для игроков SCORE PLAY и приложение для площадок<br>SCORE CRM работают в связке: спрос и предложение встречаются автоматически.</p>
       </div>
+
+      <div class="product-switch" role="tablist" aria-label="Выбор продукта">
+        <button class="product-tab is-active" type="button" role="tab" aria-selected="true" data-product-tab="play">SCORE PLAY</button>
+        <button class="product-tab" type="button" role="tab" aria-selected="false" data-product-tab="crm">SCORE CRM</button>
+      </div>
+
+      <div class="product-stage">
+      <div class="product-view is-active" data-product-view="play">
+        <article class="product-copy">
+          <p class="product-chip">SCORE PLAY · приложение для игроков</p>
+          <h3>Весь спорт в одном сервисе</h3>
+          <p>Ищите игру, присоединяйтесь в один клик, оплачивайте свою долю и растите в рейтинге. Никаких звонков, переписок и переводов на карту.</p>
+          <div class="product-features">
+            <div><strong>Рейтинг</strong><span>Партнёры и качество матча</span></div>
+            <div><strong>Сплит-оплата</strong><span>Каждый платит свою долю внутри приложения</span></div>
+            <div><strong>Поиск игр</strong><span>По уровню, времени и локации</span></div>
+            <div><strong>История</strong><span>Прогресс, достижения и личные рекорды</span></div>
+            <div><strong>Уведомления</strong><span>Подтверждения и напоминания</span></div>
+            <div><strong>Создание игры</strong><span>За 1 минуту, состав собираётся сам</span></div>
+          </div>
+        </article>
+
+        <div class="device-wrap play-mockup play-mockup-separate">
+          <figure class="play-screen tilt">
+            <img src="./assets/score-play-screen-1.svg?v=20260513-12" alt="Экран SCORE PLAY: главная для игроков">
+          </figure>
+          <figure class="play-screen tilt">
+            <img src="./assets/score-play-screen-2.svg?v=20260513-12" alt="Экран SCORE PLAY: список и фильтры игр">
+          </figure>
+        </div>
+      </div>
+
+      <div class="product-view" data-product-view="crm">
+        <article class="product-copy">
+          <p class="product-chip">SCORE CRM · для площадок</p>
+          <h3>Инструмент роста загрузки и выручки</h3>
+          <p>Перестаньте принимать брони по телефону. SCORE CRM управляет расписанием, привлекает игроков и подсказывает цены, которые максимизируют выручку.</p>
+          <div class="product-features">
+            <div><strong>Онлайн-бронирование</strong><span>Без менеджеров и звонков</span></div>
+            <div><strong>AI-цены</strong><span>Динамические тарифы под спрос</span></div>
+            <div><strong>Заполнение пустых часов</strong><span>Авто-скидки и push-кампании</span></div>
+            <div><strong>Новые клиенты</strong><span>Витрина внутри приложения SCORE</span></div>
+          </div>
+        </article>
+
+        <div class="device-wrap crm-mockup">
+          <figure class="crm-screen tilt">
+            <img src="./assets/score-crm-screen.svg?v=20260513-14" alt="Интерфейс SCORE CRM для площадок">
+          </figure>
+        </div>
+      </div>
+      </div>
+
     </section>
 
-    <section id="app" class="section app-cta reveal">
-      <div>
-        <p class="eyebrow">SCORE App</p>
-        <h2>Скачайте приложение и бронируйте спорт в пару кликов</h2>
-        <p>Пока MVP готовится к запуску, можно оставить заявку на ранний доступ.</p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn-solid" href="mailto:aiskorokirzha@edu.hse.ru">Ранний доступ</a>
-        <a class="btn btn-outline" href="mailto:aiskorokirzha@edu.hse.ru">Для площадок</a>
+    <section id="join" class="section join-cta reveal">
+      <p class="eyebrow">Готовы войти в игру?</p>
+      <h2>Присоединяйтесь к SCORE</h2>
+      <p class="join-text">Оставьте заявку, и мы свяжемся с вами. Обсудим ранний доступ или подключение площадки к экосистеме SCORE.</p>
+      <div class="join-actions">
+        <button class="btn btn-light" type="button" data-open-form="Игрок">Игрок · играть</button>
+        <button class="btn btn-ghost" type="button" data-open-form="Площадка">Площадка · подключиться</button>
+        <button class="btn btn-ghost" type="button" data-open-form="Инвестор">Инвестор · обсудить</button>
       </div>
     </section>
   </main>
+
+  <div class="modal" data-form-modal hidden>
+    <div class="modal-backdrop" data-close-form></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="join-title">
+      <button class="modal-close" type="button" data-close-form aria-label="Закрыть форму">×</button>
+      <p class="modal-eyebrow">Связаться</p>
+      <h3 id="join-title">Расскажите о себе</h3>
+      <p class="modal-lead">Оставьте заявку, и мы свяжемся с вами в течение дня.</p>
+
+      <form class="join-form" data-join-form>
+        <input type="hidden" name="role" data-role-input value="Игрок">
+
+        <div class="form-fields" data-form-fields>
+          <fieldset class="role-picker">
+            <legend>Кто вы?</legend>
+            <div class="role-options">
+              <button type="button" class="role-option is-active" data-role-option="Игрок">Игрок</button>
+              <button type="button" class="role-option" data-role-option="Площадка">Площадка</button>
+              <button type="button" class="role-option" data-role-option="Инвестор">Инвестор</button>
+              <button type="button" class="role-option" data-role-option="Другое">Другое</button>
+            </div>
+          </fieldset>
+
+          <label>
+            Ваше имя
+            <input name="name" type="text" required placeholder="Как к вам обращаться?">
+          </label>
+          <label>
+            Контакт
+            <input name="contact" type="text" required placeholder="Телефон, Telegram или email">
+          </label>
+          <label>
+            Сообщение
+            <textarea name="message" rows="4" placeholder="Коротко расскажите, чем можем помочь"></textarea>
+          </label>
+          <button class="btn btn-solid" type="submit">Отправить форму</button>
+          <p class="form-status" data-form-status aria-live="polite"></p>
+        </div>
+
+        <p class="form-success" data-form-success hidden>Форма отправлена</p>
+      </form>
+    </div>
+  </div>
 
   <footer class="footer">
     <p>© SCORE, 2026</p>
     <p>Founder: Скорокиржа Александр • aiskorokirzha@edu.hse.ru</p>
   </footer>
 
-  <script src="./app.js"></script>
+  <script src="./app.js?v=20260513-13"></script>
 </body>
 </html>
