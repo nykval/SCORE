@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCORE PLAY · Prototype</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon-s.svg?v=20260513-13">
+  <link rel="shortcut icon" type="image/svg+xml" href="../assets/favicon-s.svg?v=20260513-13">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="auth-overlay" class="auth-overlay" aria-hidden="true" hidden>
+    <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <h1 id="auth-title" class="auth-title">Вход в <span class="auth-title-logo">SCORE PLAY</span></h1>
+      <p class="auth-subtitle">Введите логин и пароль, чтобы продолжить</p>
+      <form id="auth-form" class="auth-form" autocomplete="off">
+        <label class="auth-label" for="auth-login">Логин</label>
+        <input id="auth-login" class="auth-input" type="text" maxlength="40" required>
+
+        <label class="auth-label" for="auth-password">Пароль</label>
+        <input id="auth-password" class="auth-input" type="password" maxlength="80" required>
+
+        <p id="auth-error" class="auth-error" aria-live="polite"></p>
+        <button type="submit" class="auth-submit">Войти</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+    <header class="top-frame">
+      <nav class="top-nav" aria-label="Главная навигация ScorePlay">
+        <a href="#" class="brand" aria-label="SCORE PLAY">
+          <span class="brand-wordmark" aria-hidden="true">SCORE</span>
+        </a>
+
+        <div class="main-nav" role="tablist" aria-label="Главные разделы">
+          <span class="nav-indicator" aria-hidden="true"></span>
+          <button class="nav-link is-active" type="button" data-section="venues" role="tab" aria-selected="true">Площадки</button>
+          <button class="nav-link" type="button" data-section="games" role="tab" aria-selected="false">Игры</button>
+          <button class="nav-link" type="button" data-section="team" role="tab" aria-selected="false">Команда</button>
+          <button class="nav-link" type="button" data-section="feed" role="tab" aria-selected="false">Лента</button>
+        </div>
+
+        <div class="quick-actions">
+          <button class="top-circle" type="button" aria-label="Уведомления" data-quick="notifications" aria-pressed="false">
+            <img class="top-icon" src="./icons/bell.svg" alt="">
+          </button>
+          <button class="top-circle" type="button" aria-label="Настройки" data-quick="settings" aria-pressed="false">
+            <img class="top-icon" src="./icons/settings.svg" alt="">
+          </button>
+          <button class="avatar-btn" type="button" aria-label="Профиль">
+            <img class="avatar-face" src="./avatar-profile.png" alt="Профиль">
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main class="stage">
+      <section class="section-panel is-active" data-panel="venues" aria-labelledby="venues-title">
+        <div class="venues-head">
+          <h1 id="venues-title" class="venues-title">Площадки</h1>
+          <p class="venues-subtitle">Найдите площадку для тренировки или игры</p>
+        </div>
+
+        <div class="venues-filters" aria-label="Фильтры площадок">
+          <div class="filter-search-wrap">
+            <img class="filter-search-icon" src="./icons/find.svg" alt="" aria-hidden="true">
+            <input id="venues-search" class="filter-search" type="search" placeholder="Поиск по площадкам" autocomplete="off">
+          </div>
+
+          <div class="chip-group" aria-label="Быстрые фильтры">
+            <button id="venues-new" class="filter-chip filter-chip-new" type="button" aria-pressed="false">
+              <img class="chip-icon chip-icon-sm" src="./icons/new.svg" alt="" aria-hidden="true">
+              Новые
+            </button>
+
+            <button id="venues-favorite" class="filter-chip filter-chip-favorite" type="button" aria-pressed="false">
+              <img class="chip-icon" src="./icons/heart 1.svg" alt="" aria-hidden="true">
+              Избранные
+            </button>
+
+            <button id="venues-free" class="filter-chip filter-chip-free" type="button" aria-pressed="false">
+              <img class="chip-icon chip-icon-sm" src="./icons/free 1.svg" alt="" aria-hidden="true">
+              Бесплатное
+            </button>
+          </div>
+
+          <details class="filter-dropdown sport-dropdown" id="sport-dropdown">
+            <summary class="filter-chip filter-chip-blue" id="venues-sport-label">Вид спорта <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+            <div id="venues-sport-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по виду спорта"></div>
+          </details>
+
+          <details class="filter-dropdown price-dropdown" id="price-dropdown">
+            <summary class="filter-chip filter-chip-blue" id="venues-price-label">Стоимость <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+            <div id="venues-price-menu" class="filter-menu price-menu" role="dialog" aria-label="Фильтр по стоимости"></div>
+          </details>
+
+          <details class="filter-dropdown location-geo-dropdown" id="location-dropdown">
+            <summary class="filter-chip filter-chip-blue" id="venues-location-label">Расположение <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+            <div id="venues-location-menu" class="filter-menu metro-menu location-geo-menu" role="dialog" aria-label="Фильтр по расположению"></div>
+          </details>
+
+          <details class="filter-dropdown" id="amenities-dropdown">
+            <summary class="filter-chip filter-chip-blue" id="venues-amenities-label">Удобства <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+            <div id="amenities-list" class="filter-menu sport-menu amenities-menu" role="dialog" aria-label="Фильтр по удобствам"></div>
+          </details>
+
+        </div>
+
+        <div id="sport-active-row" class="sport-active-row" aria-live="polite"></div>
+
+        <section class="venues-results" aria-label="Список площадок">
+          <div class="venues-results-head">
+            <h2 class="venues-results-title">Найдено площадок: <span id="venues-count">0</span></h2>
+          </div>
+          <div id="venues-grid" class="venues-grid"></div>
+        </section>
+      </section>
+
+      <section class="section-panel" data-panel="games">
+        <div class="placeholder">
+          <h2 class="placeholder-title">Страница Игры пока еще в разработке</h2>
+          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
+        </div>
+      </section>
+
+      <section class="section-panel" data-panel="team">
+        <div class="placeholder">
+          <h2 class="placeholder-title">Страница Команда пока еще в разработке</h2>
+          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
+        </div>
+      </section>
+
+      <section class="section-panel" data-panel="feed">
+        <div class="placeholder">
+          <h2 class="placeholder-title">Страница Лента пока еще в разработке</h2>
+          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="venue-modal" class="venue-modal" hidden aria-hidden="true">
+    <button id="venue-modal-overlay" class="venue-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="venue-modal-panel" role="dialog" aria-modal="true" aria-labelledby="venue-modal-title">
+      <button id="venue-modal-close" class="venue-modal-close" type="button" aria-label="Закрыть">
+        <img src="./icons/krest.svg" alt="" aria-hidden="true">
+      </button>
+      <div id="venue-modal-content" class="venue-modal-content"></div>
+    </article>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

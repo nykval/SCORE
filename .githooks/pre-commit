@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+case "$branch" in
+  score-play/*|codex/score-play*)
+    staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+    if [ -z "$staged_files" ]; then
+      exit 0
+    fi
+
+    blocked_files="$(printf '%s\n' "$staged_files" | grep -Ev '^SCORE PLAY/' || true)"
+    if [ -n "$blocked_files" ]; then
+      echo "ERROR: In branch '$branch' you can commit only files under 'SCORE PLAY/'." >&2
+      echo "Blocked files:" >&2
+      printf '%s\n' "$blocked_files" >&2
+      echo "Move these changes to another branch, or unstage them." >&2
+      exit 1
+    fi
+  ;;
+esac
+
+exit 0
