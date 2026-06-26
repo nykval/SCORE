@@ -57,11 +57,11 @@ const logoObject = document.querySelector('[data-logo-object]');
 
 if (logoObject) {
   const logoItems = [
-    { src: './assets/logo-objects/object-1.png', alt: 'Футбольный мяч' },
-    { src: './assets/logo-objects/object-2.png', alt: 'Баскетбольный мяч' },
-    { src: './assets/logo-objects/object-3.png', alt: 'Теннисный мяч' },
-    { src: './assets/logo-objects/object-4.png', alt: 'Волейбольный мяч' },
-    { src: './assets/logo-objects/object-5.png', alt: 'Хоккейная шайба' }
+    { src: './assets/logo-objects/object-1.svg', alt: 'Футбольный мяч' },
+    { src: './assets/logo-objects/object-2.svg', alt: 'Баскетбольный мяч' },
+    { src: './assets/logo-objects/object-3.svg', alt: 'Теннисный мяч' },
+    { src: './assets/logo-objects/object-4.svg', alt: 'Волейбольный мяч' },
+    { src: './assets/logo-objects/object-5.svg', alt: 'Хоккейная шайба' }
   ];
 
   const layers = logoObject.querySelectorAll('.score-object-img');
@@ -223,7 +223,7 @@ function getEasterBallNode() {
   const ball = document.createElement('div');
   ball.className = 'easter-ball';
   ball.setAttribute('aria-hidden', 'true');
-  ball.innerHTML = '<img src="./assets/logo-objects/object-1.png" alt="">';
+  ball.innerHTML = '<img src="./assets/logo-objects/object-1.svg" alt="">';
   document.body.appendChild(ball);
   easterBallNode = ball;
   return easterBallNode;

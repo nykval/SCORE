@@ -41,15 +41,11 @@
           <button class="nav-link is-active" type="button" data-section="venues" role="tab" aria-selected="true">Площадки</button>
           <button class="nav-link" type="button" data-section="games" role="tab" aria-selected="false">Игры</button>
           <button class="nav-link" type="button" data-section="team" role="tab" aria-selected="false">Команда</button>
-          <button class="nav-link" type="button" data-section="feed" role="tab" aria-selected="false">Лента</button>
         </div>
 
         <div class="quick-actions">
           <button class="top-circle" type="button" aria-label="Уведомления" data-quick="notifications" aria-pressed="false">
             <img class="top-icon" src="./icons/bell.svg" alt="">
-          </button>
-          <button class="top-circle" type="button" aria-label="Настройки" data-quick="settings" aria-pressed="false">
-            <img class="top-icon" src="./icons/settings.svg" alt="">
           </button>
           <button class="avatar-btn" type="button" aria-label="Профиль">
             <img class="avatar-face" src="./avatar-profile.png" alt="Профиль">
@@ -72,12 +68,12 @@
 
           <div class="chip-group" aria-label="Быстрые фильтры">
             <button id="venues-new" class="filter-chip filter-chip-new" type="button" aria-pressed="false">
-              <img class="chip-icon chip-icon-sm" src="./icons/new.svg" alt="" aria-hidden="true">
+              <img class="chip-icon chip-icon-sm" src="./icons/new.svg?v=20260522-3" alt="" aria-hidden="true">
               Новые
             </button>
 
             <button id="venues-favorite" class="filter-chip filter-chip-favorite" type="button" aria-pressed="false">
-              <img class="chip-icon" src="./icons/heart 1.svg" alt="" aria-hidden="true">
+              <img class="chip-icon chip-icon-favorite" src="./icons/избранное фильтр.svg?v=20260522-1" alt="" aria-hidden="true">
               Избранные
             </button>
 
@@ -106,7 +102,6 @@
             <summary class="filter-chip filter-chip-blue" id="venues-amenities-label">Удобства <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
             <div id="amenities-list" class="filter-menu sport-menu amenities-menu" role="dialog" aria-label="Фильтр по удобствам"></div>
           </details>
-
         </div>
 
         <div id="sport-active-row" class="sport-active-row" aria-live="polite"></div>
@@ -119,26 +114,276 @@
         </section>
       </section>
 
-      <section class="section-panel" data-panel="games">
-        <div class="placeholder">
-          <h2 class="placeholder-title">Страница Игры пока еще в разработке</h2>
-          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
+      <section class="section-panel" data-panel="games" aria-labelledby="games-title">
+        <div class="venues-head games-head">
+          <div class="games-head-row">
+            <h1 id="games-title" class="venues-title">Игры</h1>
+            <button id="games-create-btn" class="games-create-btn" type="button">Создать игру</button>
+          </div>
+          <p class="venues-subtitle">Найдите игру по уровню, времени и расположению</p>
+        </div>
+
+        <div id="games-filters-wrap" class="venues-filters games-filters-wrap" aria-label="Фильтры игр">
+          <div class="games-filters-top-row">
+            <div class="filter-search-wrap">
+              <img class="filter-search-icon" src="./icons/find.svg" alt="" aria-hidden="true">
+              <input id="games-search" class="filter-search" type="search" placeholder="Поиск по играм" autocomplete="off" aria-label="Поиск игр">
+              <button id="games-search-clear" class="games-search-clear" type="button" hidden aria-label="Очистить поиск">×</button>
+            </div>
+
+            <div class="chip-group" aria-label="Быстрые фильтры игр">
+              <button id="games-free" class="filter-chip filter-chip-free" type="button" aria-pressed="false">
+                <img class="chip-icon chip-icon-sm" src="./icons/free 1.svg" alt="" aria-hidden="true">
+                Бесплатно
+              </button>
+              <button id="games-new" class="filter-chip filter-chip-new" type="button" aria-pressed="false">
+                <img class="chip-icon chip-icon-sm" src="./icons/new.svg?v=20260522-3" alt="" aria-hidden="true">
+                Новые
+              </button>
+              <button id="games-coach" class="filter-chip filter-chip-coach" type="button" aria-pressed="false">
+                <img class="chip-icon chip-icon-sm" src="./icons/coach.svg" alt="" aria-hidden="true">
+                С тренером
+              </button>
+              <button id="games-today" class="filter-chip filter-chip-blue" type="button" aria-pressed="false">Сегодня</button>
+              <button id="games-almost" class="filter-chip filter-chip-blue" type="button" aria-pressed="false">Почти собрана</button>
+              <button id="games-slots" class="filter-chip filter-chip-blue" type="button" aria-pressed="false">Есть свободные места</button>
+            </div>
+          </div>
+
+          <div class="games-filters-main-row">
+            <details class="filter-dropdown" id="games-sport-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-sport-label">Вид спорта <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-sport-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по виду спорта"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-date-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-date-label">Дата <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-date-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по дате"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-time-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-time-label">Время <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-time-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по времени"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-level-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-level-label">Уровень игры <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-level-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по уровню игры"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-format-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-format-label">Формат игры <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-format-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по формату игры"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-price-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-price-label">Стоимость <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-price-menu" class="filter-menu price-menu" role="dialog" aria-label="Фильтр по стоимости"></div>
+            </details>
+
+            <details class="filter-dropdown location-geo-dropdown" id="games-location-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-location-label">Расположение <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-location-menu" class="filter-menu metro-menu location-geo-menu" role="dialog" aria-label="Фильтр по расположению"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-seats-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-seats-label">Свободные места <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-seats-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по свободным местам"></div>
+            </details>
+
+            <details class="filter-dropdown" id="games-gender-dropdown">
+              <summary class="filter-chip filter-chip-blue" id="games-gender-label">Пол / тип состава <img class="chip-plus-icon" src="./icons/plus.svg" alt="" aria-hidden="true"></summary>
+              <div id="games-gender-menu" class="filter-menu sport-menu" role="dialog" aria-label="Фильтр по полу и составу"></div>
+            </details>
+          </div>
+        </div>
+
+        <div id="games-active-row" class="sport-active-row" aria-live="polite"></div>
+
+        <section class="games-results" aria-label="Список игр">
+          <div class="games-results-head">
+            <h2 class="venues-results-title">Найдено игр: <span id="games-count">0</span></h2>
+          </div>
+          <p id="games-error" class="games-error" hidden></p>
+          <div id="games-grid" class="games-grid" role="list"></div>
+        </section>
+      </section>
+
+      <section class="section-panel" data-panel="team" aria-label="Команда">
+        <div class="team-layout">
+          <section class="team-card" aria-label="Карточка команды">
+            <div class="team-card-head">
+              <div id="team-card-identity" class="team-card-identity"></div>
+              <div class="team-card-controls">
+                <div class="team-switch-row">
+                  <select id="team-switch" class="team-switch-select" aria-label="Переключение команд"></select>
+                  <button id="team-create-btn" class="team-create-btn" type="button">Создать команду</button>
+                </div>
+              </div>
+            </div>
+            <div id="team-metrics-grid" class="team-metrics-grid"></div>
+          </section>
+
+          <section class="team-events-section" aria-label="События команды">
+            <div class="team-events-head-row">
+              <h2 class="team-events-title">События команды</h2>
+              <span id="team-events-count" class="team-events-count">0 событий</span>
+            </div>
+            <div class="team-events-strip">
+              <div id="team-events-track" class="team-events-track" role="list"></div>
+            </div>
+          </section>
+
+          <div class="team-main-grid">
+            <section class="team-roster-card" aria-label="Состав команды">
+              <div class="team-card-title-row">
+                <h2 class="team-block-title">Состав команды</h2>
+                <button id="team-open-requests" class="team-inline-btn" type="button">Заявки и приглашения</button>
+              </div>
+              <ul id="team-members-list" class="team-members-list"></ul>
+              <div class="team-roster-actions">
+                <button id="team-invite-player" class="team-action-btn is-primary" type="button">Пригласить игрока</button>
+                <button id="team-show-more" class="team-action-btn is-ghost" type="button">Показать еще</button>
+              </div>
+            </section>
+
+            <aside class="team-side-actions" aria-label="Действия команды">
+              <article class="team-action-card">
+                <div class="team-action-icon" aria-hidden="true">🏟</div>
+                <h3>Создать игру</h3>
+                <p>Организуйте матч или тренировку</p>
+                <button id="team-create-game-btn" class="team-action-btn is-primary" type="button">Создать</button>
+              </article>
+
+              <article class="team-action-card">
+                <div class="team-action-icon" aria-hidden="true">⚔</div>
+                <h3>Поиск соперника</h3>
+                <p id="team-opponent-meta">Футбол • Любитель+ • Юг Москвы</p>
+                <p id="team-opponent-count" class="team-opponent-count">Найдено 0 потенциальных команд</p>
+                <button id="team-find-opponent-btn" class="team-action-btn is-secondary" type="button">Найти соперника</button>
+              </article>
+            </aside>
+          </div>
         </div>
       </section>
 
-      <section class="section-panel" data-panel="team">
-        <div class="placeholder">
-          <h2 class="placeholder-title">Страница Команда пока еще в разработке</h2>
-          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
+      <section class="section-panel" data-panel="profile" aria-label="Профиль">
+        <div class="profile-shell">
+          <section class="profile-hero-card" aria-label="Спортивная карточка игрока">
+            <div class="profile-cover"></div>
+            <div class="profile-hero-content">
+              <div class="profile-avatar-stack">
+                <img id="profile-main-avatar" class="profile-main-avatar" src="./avatar/avatar-1.svg" alt="Аватар профиля">
+                <span class="profile-avatar-status" aria-hidden="true"></span>
+              </div>
+
+              <div class="profile-identity">
+                <div class="profile-name-row">
+                  <h1 id="profile-name-title" class="profile-name">Саша Скоромиржа</h1>
+                  <span class="profile-rating-pill">★ 4.8</span>
+                  <span class="profile-trust-pill">Надежный игрок</span>
+                </div>
+                <p id="profile-meta-text" class="profile-meta">Футбол • Баскетбол • Москва, Текстильщики</p>
+                <div id="profile-sport-chips" class="profile-sport-chips" aria-label="Виды спорта профиля"></div>
+                <p id="profile-about-text" class="profile-about">Игрок 5 лет. Люблю утренние тренировки и честную игру.</p>
+              </div>
+
+              <div class="profile-actions">
+                <button id="profile-edit-btn" class="profile-edit-btn" type="button">Настроить профиль</button>
+                <button id="profile-next-game-btn" class="profile-next-game-card" type="button">
+                  <span>Ближайшая игра</span>
+                  <strong>Сегодня · 20:30</strong>
+                  <small>SCORE Arena</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="profile-stat-grid">
+              <article class="profile-stat-card is-blue">
+                <span>Игры</span>
+                <strong id="profile-stat-games">47</strong>
+              </article>
+              <article class="profile-stat-card is-green">
+                <span>Победы</span>
+                <strong id="profile-stat-wins">31</strong>
+              </article>
+              <article class="profile-stat-card is-yellow">
+                <span>Команды</span>
+                <strong id="profile-stat-teams">3</strong>
+              </article>
+              <article class="profile-stat-card is-red">
+                <span>Посещаемость</span>
+                <strong id="profile-stat-attendance">91%</strong>
+              </article>
+            </div>
+
+            <div class="profile-level-card">
+              <div class="profile-level-head">
+                <span id="profile-level-label">Любитель → Средний</span>
+                <strong id="profile-level-score">47/70</strong>
+              </div>
+              <div class="profile-level-track" aria-hidden="true">
+                <span id="profile-level-progress" style="width: 67%;"></span>
+              </div>
+              <p id="profile-level-note">Еще 23 игры до уровня “Средний”</p>
+            </div>
+          </section>
+
+          <div class="profile-tabs" role="tablist" aria-label="Разделы профиля">
+            <button class="profile-tab is-active" type="button" data-profile-tab="stats" role="tab" aria-selected="true">Статистика</button>
+            <button class="profile-tab" type="button" data-profile-tab="games" role="tab" aria-selected="false">Игры</button>
+            <button class="profile-tab" type="button" data-profile-tab="settings" role="tab" aria-selected="false">Настройки</button>
+          </div>
+
+          <div id="profile-stats-panel" class="profile-tab-panel is-active" data-profile-panel="stats">
+            <section class="profile-activity-card">
+              <div>
+                <span class="profile-card-kicker">Активность</span>
+                <h2>6 игр в этом месяце</h2>
+                <p>Ритм стабильный: вы играете чаще, чем 72% игроков SCORE.</p>
+              </div>
+              <span class="profile-growth-pill">+2 vs прошлый</span>
+              <div class="profile-activity-grid" aria-label="Активность по дням">
+                <span></span><span class="is-active"></span><span></span><span class="is-hot"></span><span class="is-active"></span><span></span><span class="is-active"></span>
+                <span class="is-active"></span><span></span><span></span><span class="is-hot"></span><span></span><span class="is-active"></span><span></span>
+                <span></span><span class="is-active"></span><span class="is-active"></span><span></span><span></span><span class="is-hot"></span><span></span>
+              </div>
+            </section>
+
+            <div class="profile-insights-grid">
+              <article class="profile-insight-card">
+                <span>Любимый спорт</span>
+                <strong id="profile-favorite-sport">Футбол</strong>
+                <p>Основной вид спорта</p>
+              </article>
+              <article class="profile-insight-card">
+                <span>Лучшее время</span>
+                <strong id="profile-best-time">Вечер</strong>
+                <p>По игровым предпочтениям</p>
+              </article>
+              <article class="profile-insight-card">
+                <span>Посещаемость</span>
+                <strong>91%</strong>
+                <p>Отличная надежность</p>
+              </article>
+            </div>
+          </div>
+
+          <div id="profile-games-panel" class="profile-tab-panel" data-profile-panel="games">
+            <div class="profile-games-filters">
+              <button class="profile-filter-pill is-active" type="button" data-profile-games-filter="joined">Участвую</button>
+              <button class="profile-filter-pill" type="button" data-profile-games-filter="organized">Организую</button>
+              <button class="profile-filter-pill" type="button" data-profile-games-filter="favorite">Избранное</button>
+            </div>
+            <div id="profile-games-list" class="profile-games-list"></div>
+          </div>
+
+          <div id="profile-settings-panel" class="profile-tab-panel" data-profile-panel="settings">
+            <div id="profile-settings-content" class="profile-settings-layout"></div>
+          </div>
         </div>
       </section>
 
-      <section class="section-panel" data-panel="feed">
-        <div class="placeholder">
-          <h2 class="placeholder-title">Страница Лента пока еще в разработке</h2>
-          <img class="placeholder-art" src="./icons/gryst.svg" alt="Иллюстрация в разработке">
-        </div>
-      </section>
     </main>
   </div>
 
@@ -152,6 +397,98 @@
     </article>
   </div>
 
+  <div id="game-modal" class="game-modal" hidden aria-hidden="true">
+    <button id="game-modal-overlay" class="game-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="game-modal-panel" role="dialog" aria-modal="true" aria-labelledby="game-modal-title">
+      <button id="game-modal-close" class="game-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div id="game-modal-content" class="game-modal-content"></div>
+    </article>
+  </div>
+
+  <div id="game-create-modal" class="game-modal game-create-modal" hidden aria-hidden="true">
+    <button id="game-create-overlay" class="game-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="game-modal-panel game-create-panel" role="dialog" aria-modal="true" aria-labelledby="game-create-title">
+      <button id="game-create-close" class="game-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div id="game-create-content" class="game-modal-content game-create-content"></div>
+    </article>
+  </div>
+
+  <div id="team-requests-modal" class="game-modal team-modal" hidden aria-hidden="true">
+    <button id="team-requests-overlay" class="game-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="game-modal-panel team-modal-panel" role="dialog" aria-modal="true" aria-labelledby="team-requests-title">
+      <button id="team-requests-close" class="game-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div class="game-modal-content">
+        <h3 id="team-requests-title" class="team-modal-title">Заявки и приглашения</h3>
+        <div id="team-requests-list" class="team-requests-list"></div>
+      </div>
+    </article>
+  </div>
+
+  <div id="team-event-modal" class="game-modal team-modal" hidden aria-hidden="true">
+    <button id="team-event-overlay" class="game-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="game-modal-panel team-modal-panel" role="dialog" aria-modal="true" aria-labelledby="team-event-title">
+      <button id="team-event-close" class="game-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div id="team-event-content" class="game-modal-content"></div>
+    </article>
+  </div>
+
+  <div id="team-create-modal" class="game-modal team-modal" hidden aria-hidden="true">
+    <button id="team-create-overlay" class="game-modal-overlay" type="button" aria-label="Закрыть"></button>
+    <article class="game-modal-panel team-modal-panel" role="dialog" aria-modal="true" aria-labelledby="team-create-title">
+      <button id="team-create-close" class="game-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div class="game-modal-content">
+        <h3 id="team-create-title" class="team-modal-title">Создать команду</h3>
+        <form id="team-create-form" class="team-create-form">
+          <label>Название команды
+            <input id="team-create-name" type="text" maxlength="40" placeholder="Например, SCORE Tigers" required>
+          </label>
+          <label>Вид спорта
+            <select id="team-create-sport">
+              <option>Футбол</option>
+              <option>Баскетбол</option>
+              <option>Волейбол</option>
+              <option>Теннис</option>
+            </select>
+          </label>
+          <label>Уровень
+            <select id="team-create-level">
+              <option>Новичок</option>
+              <option selected>Любитель+</option>
+              <option>Средний</option>
+              <option>Продвинутый</option>
+            </select>
+          </label>
+          <button class="team-action-btn is-primary" type="submit">Создать</button>
+        </form>
+      </div>
+    </article>
+  </div>
+
+
+  <div id="profile-avatar-modal" class="profile-modal" hidden aria-hidden="true">
+    <button id="profile-avatar-overlay" class="profile-modal-overlay" type="button" aria-label="Закрыть выбор аватара"></button>
+    <article class="profile-modal-panel profile-avatar-panel" role="dialog" aria-modal="true" aria-labelledby="profile-avatar-title">
+      <button id="profile-avatar-close" class="profile-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div class="profile-modal-head">
+        <span class="profile-card-kicker">Профиль</span>
+        <h3 id="profile-avatar-title">Выберите аватар</h3>
+        <p>Аватар будет показываться в шапке и спортивной карточке.</p>
+      </div>
+      <div id="profile-avatar-picker-grid" class="profile-avatar-picker-grid"></div>
+      <div class="profile-modal-actions">
+        <button id="profile-avatar-cancel" class="profile-btn-secondary" type="button">Отмена</button>
+        <button id="profile-avatar-save" class="profile-btn-primary" type="button">Сохранить</button>
+      </div>
+    </article>
+  </div>
+
+  <div id="profile-sport-modal" class="profile-modal" hidden aria-hidden="true">
+    <button id="profile-sport-overlay" class="profile-modal-overlay" type="button" aria-label="Закрыть настройку спорта"></button>
+    <article class="profile-modal-panel profile-sport-panel" role="dialog" aria-modal="true" aria-labelledby="profile-sport-title">
+      <button id="profile-sport-close" class="profile-modal-close" type="button" aria-label="Закрыть">×</button>
+      <div id="profile-sport-modal-content"></div>
+    </article>
+  </div>
   <script src="./app.js"></script>
 </body>
 </html>
