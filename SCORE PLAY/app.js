@@ -649,17 +649,17 @@ const metroLines = [
 
 const amenitiesCatalog = ['Освещение', 'Раздевалка', 'Еда', 'Туалет', 'WI-FI', 'Банкомат', 'Медпункт', 'Звук', 'Аренда оборудования', 'Описание аренды оборудования', 'Подходит ли для инвалидов'];
 const amenityMeta = [
-  { key: 'lighting', label: 'Освещение', iconFile: 'освещение.svg', description: 'Есть вечерний свет для игр и тренировок' },
-  { key: 'changingRoom', label: 'Раздевалка', iconFile: 'раздевалка.svg', description: 'Комфортные раздевалки рядом с площадкой' },
-  { key: 'food', label: 'Еда', iconFile: 'еда.svg', description: 'Кафе или зона питания на территории' },
-  { key: 'toilet', label: 'Туалет', iconFile: 'туалет.svg', description: 'Санузел доступен для посетителей' },
-  { key: 'wifi', label: 'WI-FI', iconFile: 'вайфай.svg', description: 'Беспроводной интернет на площадке' },
-  { key: 'atm', label: 'Банкомат', iconFile: 'банкомат.svg', description: 'Есть банкомат или терминал оплаты рядом' },
-  { key: 'medicalPoint', label: 'Медпункт', iconFile: 'медпункт.svg', description: 'Пункт первой помощи на объекте' },
-  { key: 'sound', label: 'Звук', iconFile: 'звуковые колонки.svg', description: 'Акустика для мероприятий и тренировок' },
-  { key: 'equipmentRent', label: 'Аренда оборудования', iconFile: 'арендаинвентаря.svg', description: 'Можно взять инвентарь в аренду' },
-  { key: 'equipmentRentDescription', label: 'Описание аренды оборудования', iconFile: 'арендаинвентаря.svg', description: 'Детали и состав арендуемого инвентаря' },
-  { key: 'accessible', label: 'Подходит для маломобильных', iconFile: 'оборудование для инвалидов.svg', description: 'Есть условия для маломобильных посетителей' }
+  { key: 'lighting', label: 'Освещение', iconFile: 'lighting.svg', description: 'Есть вечерний свет для игр и тренировок' },
+  { key: 'changingRoom', label: 'Раздевалка', iconFile: 'changing-room.svg', description: 'Комфортные раздевалки рядом с площадкой' },
+  { key: 'food', label: 'Еда', iconFile: 'food.svg', description: 'Кафе или зона питания на территории' },
+  { key: 'toilet', label: 'Туалет', iconFile: 'toilet.svg', description: 'Санузел доступен для посетителей' },
+  { key: 'wifi', label: 'WI-FI', iconFile: 'wifi.svg', description: 'Беспроводной интернет на площадке' },
+  { key: 'atm', label: 'Банкомат', iconFile: 'atm.svg', description: 'Есть банкомат или терминал оплаты рядом' },
+  { key: 'medicalPoint', label: 'Медпункт', iconFile: 'medical-point.svg', description: 'Пункт первой помощи на объекте' },
+  { key: 'sound', label: 'Звук', iconFile: 'sound-speakers.svg', description: 'Акустика для мероприятий и тренировок' },
+  { key: 'equipmentRent', label: 'Аренда оборудования', iconFile: 'equipment-rent.svg', description: 'Можно взять инвентарь в аренду' },
+  { key: 'equipmentRentDescription', label: 'Описание аренды оборудования', iconFile: 'equipment-rent.svg', description: 'Детали и состав арендуемого инвентаря' },
+  { key: 'accessible', label: 'Подходит для маломобильных', iconFile: 'accessibility-equipment.svg', description: 'Есть условия для маломобильных посетителей' }
 ];
 const districtGroups = [
   {
@@ -1059,12 +1059,12 @@ const profileGames = [
 ];
 
 const GAME_SPORT_PHOTOS = {
-  'волейбол': './photo-plays/воллеи\u0306бол.svg',
-  'футбол': './photo-plays/футбол.svg',
-  'баскетбол': './photo-plays/баскетбол.svg',
-  'теннис': './photo-plays/теннис.svg',
-  'падел': './photo-plays/падел.svg',
-  'хоккей': './photo-plays/хоккеи\u0306.svg'
+  'волейбол': './photo-plays/volleyball.svg',
+  'футбол': './photo-plays/football.svg',
+  'баскетбол': './photo-plays/basketball.svg',
+  'теннис': './photo-plays/tennis.svg',
+  'падел': './photo-plays/padel.svg',
+  'хоккей': './photo-plays/hockey.svg'
 };
 
 const GAME_FALLBACK_COLORS = ['#3A85FD', '#75EA89', '#FCC005', '#E82644', '#343E57'];
@@ -2887,16 +2887,16 @@ function renderVenueExpanded(venue) {
             </div>
             <div class="venue-sheet-actions">
               <button class="venue-sheet-icon-btn" type="button" aria-label="Поделиться">
-                <img class="venue-sheet-action-icon" src="./icons/поделиться.svg?v=20260522-1" alt="" aria-hidden="true">
+                <img class="venue-sheet-action-icon" src="./icons/share.svg?v=20260522-1" alt="" aria-hidden="true">
               </button>
               <button class="venue-sheet-icon-btn ${venue.isFavorite ? 'is-favorite-active' : ''}" type="button" data-venue-favorite="${venue.id}" aria-label="Избранное" aria-pressed="${venue.isFavorite ? 'true' : 'false'}">
-                <img class="venue-sheet-action-icon" src="./icons/избранное.svg?v=20260522-1" alt="" aria-hidden="true">
+                <img class="venue-sheet-action-icon" src="./icons/favorite.svg?v=20260522-1" alt="" aria-hidden="true">
               </button>
             </div>
           </div>
 
           <a class="venue-sheet-address" href="https://yandex.ru/maps/?text=${encodeURIComponent(venue.address)}" target="_blank" rel="noopener noreferrer">
-            <span class="venue-sheet-inline-icon" aria-hidden="true"><img src="${getAmenityIconPath('расположение.svg')}" alt=""></span>
+            <span class="venue-sheet-inline-icon" aria-hidden="true"><img src="${getAmenityIconPath('location.svg')}" alt=""></span>
             <span>${venue.area}, ${venue.address}</span>
           </a>
 
@@ -2907,7 +2907,7 @@ function renderVenueExpanded(venue) {
             <span class="venue-sheet-metro-stops">${renderVenueMetroStops(metroStops)}</span>
           </div>
           <div class="venue-sheet-subline">
-            <span class="venue-sheet-inline-icon is-schedule" aria-hidden="true"><img src="./icons/расписание.svg" alt=""></span>
+            <span class="venue-sheet-inline-icon is-schedule" aria-hidden="true"><img src="./icons/schedule.svg" alt=""></span>
             <span>${getVenueScheduleText(venue)}</span>
           </div>
 
@@ -2932,15 +2932,15 @@ function renderVenueExpanded(venue) {
           <h4 class="venue-sheet-section-title">Партнер площадки</h4>
           <div class="venue-sheet-partner-row">
             <a class="venue-sheet-partner-item" href="${phoneHref}">
-              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/телефон.svg" alt=""></span>
+              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/phone.svg" alt=""></span>
               <span>${venue.phone || '—'}</span>
             </a>
             <a class="venue-sheet-partner-item" href="${websiteHref}" target="_blank" rel="noopener noreferrer">
-              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/сайт.svg" alt=""></span>
+              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/website.svg" alt=""></span>
               <span>${websiteLabel}</span>
             </a>
             <a class="venue-sheet-partner-item" href="${emailHref}">
-              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/почта.svg" alt=""></span>
+              <span class="venue-sheet-partner-icon" aria-hidden="true"><img src="./icons/email.svg" alt=""></span>
               <span>${venue.email || '—'}</span>
             </a>
           </div>
@@ -3012,7 +3012,7 @@ function renderVenueCards() {
           </div>
           <h3 class="venue-card-name">${venue.shortName}</h3>
           <p class="venue-card-meta venue-card-location-row">
-            <span class="venue-sheet-inline-icon" aria-hidden="true"><img src="${getAmenityIconPath('расположение.svg')}" alt=""></span>
+            <span class="venue-sheet-inline-icon" aria-hidden="true"><img src="${getAmenityIconPath('location.svg')}" alt=""></span>
             <span>${shortLocation}</span>
           </p>
           <p class="venue-card-meta venue-card-metro-row">
@@ -4461,11 +4461,11 @@ function getGameCardMarkup(game, index, status, isArchive = false) {
       <div class="game-card-body">
         <h3 class="game-card-title">${escapeHtml(game.title)}</h3>
         <p class="game-meta-row is-icon">
-          <span class="game-meta-icon" aria-hidden="true"><img class="game-meta-icon-img" src="./icons/расписание.svg" alt=""></span>
+          <span class="game-meta-icon" aria-hidden="true"><img class="game-meta-icon-img" src="./icons/schedule.svg" alt=""></span>
           <span>${escapeHtml(toShortDateTime(game))} · ${escapeHtml(toTimeRange(game))}</span>
         </p>
         <p class="game-meta-row is-icon">
-          <span class="game-meta-icon" aria-hidden="true"><img class="game-meta-icon-img" src="./icons/расположение.svg" alt=""></span>
+          <span class="game-meta-icon" aria-hidden="true"><img class="game-meta-icon-img" src="./icons/location.svg" alt=""></span>
           <span>${escapeHtml(game.locationName)} · м. ${escapeHtml(game.metro)}</span>
         </p>
         <div class="game-level-price">
@@ -4578,12 +4578,12 @@ function renderGameDetails(game) {
 
     <section class="game-detail-summary" aria-label="Ключевые параметры игры">
       <div class="game-detail-fact">
-        <span class="game-detail-fact-icon"><img src="./icons/расписание.svg" alt="" aria-hidden="true"></span>
+        <span class="game-detail-fact-icon"><img src="./icons/schedule.svg" alt="" aria-hidden="true"></span>
         <span>Дата и время</span>
         <strong>${escapeHtml(toShortDateTime(game))} · ${escapeHtml(toTimeRange(game))}</strong>
       </div>
       <div class="game-detail-fact">
-        <span class="game-detail-fact-icon"><img src="./icons/расположение.svg" alt="" aria-hidden="true"></span>
+        <span class="game-detail-fact-icon"><img src="./icons/location.svg" alt="" aria-hidden="true"></span>
         <span>Площадка</span>
         <strong>${escapeHtml(game.locationName)}</strong>
       </div>
@@ -4601,7 +4601,7 @@ function renderGameDetails(game) {
 
     <section class="game-detail-map-card">
       <div class="game-detail-map-visual">
-        <img src="./icons/расположение.svg" alt="" aria-hidden="true">
+        <img src="./icons/location.svg" alt="" aria-hidden="true">
         <span>${escapeHtml(game.district)}</span>
       </div>
       <div class="game-detail-map-meta">
@@ -4636,10 +4636,10 @@ function renderGameDetails(game) {
 
     <div class="game-detail-actions">
       <button class="game-detail-icon-btn" type="button" data-game-modal-favorite="${escapeAttr(game.id)}" aria-label="Избранное">
-        <img src="./icons/избранное.svg" alt="" aria-hidden="true">
+        <img src="./icons/favorite.svg" alt="" aria-hidden="true">
       </button>
       <button class="game-detail-icon-btn" type="button" data-game-share="${escapeAttr(game.id)}" aria-label="Поделиться">
-        <img src="./icons/поделиться.svg" alt="" aria-hidden="true">
+        <img src="./icons/share.svg" alt="" aria-hidden="true">
       </button>
       <button class="game-detail-join-btn ${joinMeta.className}" type="button" data-game-modal-join="${escapeAttr(game.id)}" ${joinMeta.disabled ? 'disabled' : ''}>${escapeHtml(joinMeta.text)}</button>
     </div>

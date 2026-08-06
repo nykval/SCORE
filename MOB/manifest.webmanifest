@@ -1,16 +1,30 @@
 {
-  "name": "SCORE PLAY Mobile",
+  "id": "/MOB/",
+  "name": "SCORE PLAY",
   "short_name": "SCORE",
-  "start_url": "./index.html",
+  "description": "SCORE PLAY mobile app",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "./index.html?source=pwa",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "background_color": "#E7EDFC",
-  "theme_color": "#3A85FD",
+  "theme_color": "#3A83FD",
   "orientation": "portrait",
+  "categories": ["sports", "lifestyle"],
   "icons": [
     {
-      "src": "../assets/favicon-s.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "./icons/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
