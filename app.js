@@ -14,6 +14,7 @@ document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el))
 const topbar = document.querySelector('.topbar');
 const menuToggleButton = document.querySelector('[data-menu-toggle]');
 const topbarMenuLinks = document.querySelectorAll('.topbar .menu a');
+const versionSwitch = document.querySelector('.version-switch');
 const mobileMenuQuery = window.matchMedia('(max-width: 760px)');
 
 function closeTopbarMenu() {
@@ -49,6 +50,19 @@ if (topbar && menuToggleButton) {
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && mobileMenuQuery.matches && topbar.classList.contains('is-menu-open')) {
       closeTopbarMenu();
+    }
+  });
+}
+
+if (versionSwitch) {
+  document.addEventListener('click', (event) => {
+    if (!versionSwitch.open || versionSwitch.contains(event.target)) return;
+    versionSwitch.removeAttribute('open');
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      versionSwitch.removeAttribute('open');
     }
   });
 }

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260513-13">
+  <link rel="stylesheet" href="./styles.css?v=20260806-version-switch">
 </head>
 <body>
   <div class="bg-orb orb-a" aria-hidden="true"></div>
@@ -25,7 +25,14 @@
       <a href="#join">Контакты</a>
     </nav>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="topbar-menu" data-menu-toggle>Меню</button>
-    <a class="btn btn-outline" href="./SCORE%20PLAY/index.html">Войти</a>
+    <details class="version-switch">
+      <summary aria-label="Выбрать версию приложения">Открыть</summary>
+      <div class="version-switch-panel" role="group" aria-label="Какую версию открыть">
+        <span>Какую версию открыть?</span>
+        <a href="./SCORE%20PLAY/index.html">Web</a>
+        <a href="./MOB/index.html">Mob</a>
+      </div>
+    </details>
   </header>
 
   <main id="top">
@@ -274,6 +281,6 @@
     <p>Founder: Скорокиржа Александр • aiskorokirzha@edu.hse.ru</p>
   </footer>
 
-  <script src="./app.js?v=20260513-13"></script>
+  <script src="./app.js?v=20260806-version-switch"></script>
 </body>
 </html>

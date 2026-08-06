@@ -1,4 +1,24 @@
+@font-face {
+  font-family: "Raleway";
+  src: url("../assets/fonts/Raleway-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("../assets/fonts/Raleway-Italic-VariableFont_wght.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root {
+  --brand-blue: #3A83FD;
+  --brand-red: #E82644;
+  --brand-green: #75EA89;
+  --brand-yellow: #FCC005;
   --color-bg: #E7EDFC;
   --color-bg-top: #f4f8ff;
   --color-card: #ffffff;
@@ -7,12 +27,12 @@
   --color-muted: #5b6d92;
   --color-line: #bfd0f5;
   --color-line-soft: rgba(191, 208, 245, 0.58);
-  --color-blue: #3A85FD;
+  --color-blue: var(--brand-blue);
   --color-blue-dark: #2a5fcb;
-  --color-red: #E82644;
-  --color-green: #75EA89;
+  --color-red: var(--brand-red);
+  --color-green: var(--brand-green);
   --color-green-text: #1f7d4e;
-  --color-yellow: #FCC005;
+  --color-yellow: var(--brand-yellow);
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -27,8 +47,9 @@
   --radius-pill: 999px;
   --shadow-card: 0 14px 34px rgba(63, 130, 241, 0.12);
   --shadow-nav: 0 18px 44px rgba(42, 95, 203, 0.18);
-  --font-ui: "Manrope", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: "Raleway", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tg-top-offset: 0px;
   --nav-height: 78px;
 }

@@ -1,37 +1,32 @@
 import { renderGameCard, renderGameRow, renderMemberRow, renderProfileCard, renderTeamCard, renderTeamEvent, renderVenueCard } from '../components/cards.js';
 import { chip, emptyState, progressBar, searchBar, viewToggle } from '../components/ui.js';
-import { escapeHtml, formatGameDate, formatNumber, formatPrice, uniqueSports } from '../utils/format.js';
+import { escapeAttr, escapeHtml, formatGameDate, formatNumber, formatPrice, getGameStatus, uniqueSports } from '../utils/format.js';
 
 export function renderHome({ state, nextGame, home }) {
-  const profile = state.profile;
-  const stats = profile.stats || {};
+  const stats = state.profile.stats || {};
   const hero = home?.hero || {};
   const heroGame = state.games.find((game) => game.id === hero.gameId) || nextGame;
   const quickActions = home?.quickActions || [];
   const activity = home?.activity || [];
+  const activityGames = activity
+    .filter((item) => item.action === 'game-detail' && item.id)
+    .map((item) => ({ game: state.games.find((game) => game.id === item.id), relation: item.label }))
+    .filter((item) => item.game);
+  const activityGameIds = new Set(activityGames.map((item) => item.game.id));
+  const userGames = activityGames.concat(
+    state.games
+      .filter((game) => game.joined && !activityGameIds.has(game.id))
+      .map((game) => ({ game, relation: 'Вы участвуете' }))
+  );
   const tasks = home?.tasks || [];
   const news = home?.news || [];
   return `
     <div class="screen-stack">
-      <article class="home-main-card mvp-hero-card">
-        <div class="home-main-copy">
-          <span class="eyebrow">${escapeHtml(hero.type || 'Главное сейчас')}</span>
-          <h1>${escapeHtml(hero.title || heroGame.title)}</h1>
-          <p>${escapeHtml(hero.text || `${formatGameDate(heroGame)} · ${heroGame.place}`)}</p>
-        </div>
-        <div class="home-game-panel" role="button" tabindex="0" data-action="game-detail" data-id="${heroGame.id}">
-          <img src="${heroGame.image}" alt="">
-          <div>
-            <span>${heroGame.joined ? 'Вы участвуете' : 'Есть свободные места'}</span>
-            <strong>${escapeHtml(heroGame.title)}</strong>
-            <small>${formatGameDate(heroGame)} · ${heroGame.current} из ${heroGame.max} игроков · ${formatPrice(heroGame.price)}</small>
-          </div>
-        </div>
-        <div class="home-main-actions">
-          <button class="button button-primary" type="button" data-action="game-detail" data-id="${heroGame.id}">${escapeHtml(hero.action || 'Открыть игру')}</button>
-          <button class="button button-secondary" type="button" data-action="nav" data-value="games">Все игры</button>
-        </div>
-      </article>
+      ${renderPromoCarousel({ hero, heroGame, state })}
+
+      ${renderUserGamesCarousel(userGames)}
+
+      ${renderActivityGoal({ stats, goal: state.activityGoal })}
 
       <section class="home-block">
         <div class="section-header compact">
@@ -81,6 +76,169 @@ export function renderHome({ state, nextGame, home }) {
         </div>
       </section>
     </div>
+  `;
+}
+
+function renderPromoCarousel() {
+  const slides = [
+    {
+      title: 'Создай свою первую игру',
+      image: './assets/promo/showcase-create-game.png',
+      cta: 'Создать игру'
+    },
+    {
+      title: 'Подари игру друзьям',
+      image: './assets/promo/showcase-gift-game-v2.png',
+      cta: 'Подарить игру'
+    },
+    {
+      title: 'Собери свою команду',
+      image: './assets/promo/showcase-team.png',
+      cta: 'Собрать команду'
+    },
+    {
+      title: 'Найди площадку рядом',
+      image: './assets/promo/showcase-venues.png',
+      cta: 'Найти площадку'
+    }
+  ];
+
+  return `
+    <section class="home-promo-carousel" aria-label="Промо SCORE">
+      <div class="home-promo-track">
+        ${slides.map((slide, index) => `
+          <article class="home-promo-card" aria-label="${escapeAttr(slide.title)}" style="--promo-image:url('${escapeAttr(slide.image)}')">
+            <button class="home-promo-cta" type="button" data-action="promo-unavailable">${escapeHtml(slide.cta)} <i aria-hidden="true">→</i></button>
+          </article>
+        `).join('')}
+      </div>
+      <div class="home-promo-dots" aria-hidden="true">
+        ${slides.map((_, index) => `<span class="${index === 0 ? 'is-active' : ''}"></span>`).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function renderUserGamesCarousel(items) {
+  if (!items.length) return '';
+  const countLabel = items.length === 1 ? '1 игра' : items.length < 5 ? `${items.length} игры` : `${items.length} игр`;
+  return `
+    <section class="home-user-games" aria-label="Мои игры">
+      <div class="section-header compact">
+        <h2>Мои игры</h2>
+        <span class="home-user-games-count">${countLabel}</span>
+      </div>
+      <div class="home-user-games-track">
+        ${items.map(renderUserGameCard).join('')}
+        <button class="home-user-games-more" type="button" data-action="open-game-history" aria-label="Просмотреть все игры">
+          <span aria-hidden="true">→</span>
+          <strong>Просмотреть все</strong>
+          <small>Все игры и история</small>
+        </button>
+      </div>
+    </section>
+  `;
+}
+
+function renderActivityGoal({ stats, goal }) {
+  if (!goal?.isSet) {
+    return `
+      <section class="home-activity-goal" aria-label="Цель активности">
+        <button class="activity-goal-prompt" type="button" data-action="open-activity-goal">
+          <span class="activity-goal-prompt-visual" aria-hidden="true">
+            <img class="activity-goal-prompt-image" src="./assets/activity/goal-flag-3d.png" alt="">
+          </span>
+          <span class="activity-goal-prompt-copy">
+            <strong>Поставь цель активности</strong>
+            <span>Выбери свой ритм и начни двигаться к нему</span>
+          </span>
+        </button>
+      </section>
+    `;
+  }
+
+  const completed = Math.max(0, Number(stats?.week?.minutes || 0));
+  const target = Math.max(1, Number(goal?.targetMinutes || 300));
+  const progress = Math.min(100, Math.round((completed / target) * 100));
+  const remaining = Math.max(0, target - completed);
+  const activeDays = Math.min(7, Math.max(0, Number(stats?.week?.games || 0)));
+  const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  const title = remaining > 0 ? `Ещё ${formatNumber(remaining)} минут до цели` : 'Недельная цель выполнена';
+  const pace = progress >= 100 ? 'Можно поставить новую планку' : progress >= 70 ? 'Финиш уже близко' : 'Каждая игра приближает к цели';
+
+  return `
+    <section class="home-activity-goal" aria-label="Цель активности">
+      <button class="activity-goal-card" type="button" data-action="open-activity-goal" aria-label="Открыть цель активности">
+        <span class="activity-goal-ring" style="--goal-progress:${progress}%">
+          <strong>${progress}%</strong>
+          <small>готово</small>
+        </span>
+        <span class="activity-goal-copy">
+          <small>${formatNumber(completed)} из ${formatNumber(target)} минут</small>
+          <strong>${title}</strong>
+          <span>${pace}</span>
+        </span>
+        <i class="activity-goal-arrow" aria-hidden="true">→</i>
+        <span class="activity-goal-week" aria-label="Активных дней за неделю: ${activeDays}">
+          ${days.map((day, index) => `<span class="${index < activeDays ? 'is-active' : ''}"><i></i>${day}</span>`).join('')}
+        </span>
+      </button>
+    </section>
+  `;
+}
+
+function renderUserGameCard({ game, relation }) {
+  const status = getGameStatus(game);
+  const dateLabel = formatGameDate(game).split(' · ')[0];
+  const timeParts = String(game.time || '00:00').split(':');
+  const startMinutes = Number(timeParts[0]) * 60 + Number(timeParts[1]);
+  const endMinutes = startMinutes + Number(game.duration || 60);
+  const endTime = `${String(Math.floor(endMinutes / 60) % 24).padStart(2, '0')}:${String(endMinutes % 60).padStart(2, '0')}`;
+  const relationLabel = game.joined ? 'Вы участвуете' : relation === 'Созданная игра' ? 'Вы организатор' : relation;
+  const roleClass = relationLabel === 'Вы организатор' ? 'is-organizer' : 'is-participant';
+  const slotsLeft = Math.max(0, Number(game.max || 0) - Number(game.current || 0));
+  const slotsLabel = slotsLeft === 1 ? '1 место' : slotsLeft < 5 ? `${slotsLeft} места` : `${slotsLeft} мест`;
+  const slotsClass = slotsLeft > 0 && slotsLeft <= 2 ? 'is-urgent' : '';
+  const occupancy = Math.min(100, Math.round((Number(game.current || 0) / Math.max(1, Number(game.max || 1))) * 100));
+  const avatarOffset = Math.max(0, Number.parseInt(String(game.id).replace(/\D/g, ''), 10) || 0);
+  const playerAvatars = (game.players || []).slice(0, 3).map((_, index) => `./assets/avatars/avatar-${((avatarOffset + index) % 7) + 1}.svg`);
+  return `
+    <button class="home-user-game-card ${roleClass}" style="--game-progress:${occupancy}%" type="button" data-action="promo-unavailable" aria-label="${escapeAttr(game.title)}">
+      <div class="home-user-game-head">
+        <span class="home-user-game-sport" aria-hidden="true"><img src="${escapeAttr(game.image)}" alt=""></span>
+        <span class="home-user-game-schedule">
+          <span><small>${escapeHtml(dateLabel)}</small><em class="${escapeAttr(status.className)}"><i></i>${escapeHtml(status.label)}</em></span>
+          <strong>${escapeHtml(game.time)}–${endTime}</strong>
+        </span>
+        <strong class="home-user-game-price">${formatPrice(game.price)}</strong>
+      </div>
+      <div class="home-user-game-info">
+        <h3 class="home-user-game-title">${escapeHtml(game.title)}</h3>
+        <div class="home-user-game-place">
+          <img src="./icons/location.png" alt="" aria-hidden="true">
+          <span><b>${escapeHtml(game.place)}</b><small>м. ${escapeHtml(game.metro)}</small></span>
+        </div>
+        <div class="home-user-game-meta">
+          <span>${escapeHtml(game.sport)}</span>
+          <span>${escapeHtml(game.format)}</span>
+          <span>${escapeHtml(game.level)}</span>
+        </div>
+      </div>
+      <div class="home-user-game-roster">
+        <div class="home-user-game-roster-row">
+          <div class="home-user-game-avatars" aria-hidden="true">
+            ${playerAvatars.map((src) => `<span><img src="${escapeAttr(src)}" alt=""></span>`).join('')}
+          </div>
+          <span class="home-user-game-player-count"><b>${game.current} из ${game.max}</b><small>игроков в составе</small></span>
+          <strong class="home-user-game-slots ${slotsClass}">${slotsLeft > 0 ? `Ещё ${slotsLabel}` : 'Состав собран'}</strong>
+        </div>
+        <span class="home-user-game-progress" aria-label="Состав заполнен на ${occupancy}%"><i></i></span>
+      </div>
+      <div class="home-user-game-footer">
+        <span><i aria-hidden="true">${roleClass === 'is-organizer' ? '★' : '✓'}</i>${escapeHtml(relationLabel)}</span>
+        <b>Подробнее <i aria-hidden="true">→</i></b>
+      </div>
+    </button>
   `;
 }
 
@@ -253,78 +411,11 @@ export function renderVenuesScreen({ state, venues }) {
 }
 
 export function renderProgressScreen({ state, joinedGames }) {
-  const stats = state.profile.stats || {};
-  const week = stats.week || {};
-  const month = stats.month || {};
-  const totalMinutes = Math.max(Number(month.minutes || 0) * 4, Number(stats.games || 0) * 78);
   const achievements = state.profile.achievements || [];
-  const earnedAchievements = achievements.filter((item) => item.unlocked);
-  const progressAchievements = achievements.filter((item) => !item.unlocked);
-  const footballGames = state.games.filter((game) => game.sport === 'Футбол' && game.joined).length || 23;
+  const series = groupAchievements(achievements);
   return `
-    <div class="screen-stack">
-      <section class="progress-hero-card">
-        <div>
-          <span class="eyebrow">SCORE Progress</span>
-          <h2>${formatNumber(stats.scorePoints || 0)}</h2>
-          <p>очков за активность, игры, команды и сохраненные площадки</p>
-        </div>
-        <div class="progress-level-ring" aria-label="Уровень 4">
-          <span>Уровень</span>
-          <strong>4</strong>
-        </div>
-        ${progressBar(stats.levelScore || stats.games || 0, stats.levelTarget || 70, 'До следующего уровня')}
-      </section>
-
-      <section class="section-card">
-        <div class="section-header compact"><h2>Статистика</h2></div>
-        <div class="progress-period-grid">
-          ${renderPeriodStat('Неделя', week.games || 0, week.scorePoints || 0, week.minutes || 0)}
-          ${renderPeriodStat('Месяц', month.games || 0, month.scorePoints || 0, month.minutes || 0)}
-          ${renderPeriodStat('Все время', stats.games || joinedGames.length, stats.scorePoints || 0, totalMinutes)}
-        </div>
-      </section>
-
-      <section class="section-card">
-        <div class="section-header compact">
-          <h2>Полученные достижения</h2>
-          <span class="result-label">${earnedAchievements.length}</span>
-        </div>
-        <div class="achievement-grid">
-          ${earnedAchievements.length ? earnedAchievements.map(renderAchievement).join('') : emptyState('Пока нет открытых достижений', 'Сыграйте первую игру или забронируйте площадку.')}
-        </div>
-      </section>
-
-      <section class="section-card">
-        <div class="section-header compact">
-          <h2>В процессе</h2>
-          <span class="result-label">${progressAchievements.length}</span>
-        </div>
-        <div class="achievement-grid">
-          ${progressAchievements.map(renderAchievement).join('')}
-        </div>
-      </section>
-
-      <section class="section-card progress-master-card">
-        <div>
-          <span class="eyebrow">Мастерство</span>
-          <h2>Футбольный мастер</h2>
-          <p>${footballGames} футбольных игр. Следующая цель: 30 игр и стабильная посещаемость выше 90%.</p>
-        </div>
-        ${progressBar(footballGames, 30, 'Футбольный мастер')}
-      </section>
-
-      <section class="section-card">
-        <div class="section-header compact"><h2>Статистика игрока</h2></div>
-        <div class="player-stat-grid">
-          ${statCard('Игр', stats.games || 0)}
-          ${statCard('Минут на площадках', formatNumber(stats.minutesOnVenues || totalMinutes))}
-          ${statCard('Победы', stats.wins || 0)}
-          ${statCard('Любимый спорт', stats.favoriteSport || 'Футбол')}
-          ${statCard('Любимая площадка', stats.favoriteVenue || 'Арена Лужники')}
-          ${statCard('Бронирования', stats.bookings || 0)}
-        </div>
-      </section>
+    <div class="screen-stack achievements-screen">
+      ${series.length ? series.map(renderAchievementSeries).join('') : emptyState('Пока нет ачивок', 'Скоро здесь появятся первые серии SCORE.')}
     </div>
   `;
 }
@@ -370,10 +461,20 @@ export function renderProfileScreen({ state, teams, joinedGames, favoriteVenues 
           ${['Аккаунт', 'Уведомления', 'Конфиденциальность', 'Поддержка'].map((item) => `
             <button class="settings-row" type="button" data-action="${item === 'Уведомления' ? 'open-notifications' : 'profile-detail'}">
               <span>${escapeHtml(item)}</span>
-              <img src="./icons/стрелка.png" alt="" aria-hidden="true">
+              <img src="./icons/arrow.png" alt="" aria-hidden="true">
             </button>
           `).join('')}
         </div>
+      </section>
+      <section class="profile-developer-section" aria-label="Для разраба">
+        <div class="section-header compact"><h2>Для разраба</h2></div>
+        <button class="profile-developer-action" type="button" data-action="reset-user-activity-goal">
+          <span class="profile-developer-icon" aria-hidden="true">↺</span>
+          <span class="profile-developer-copy">
+            <strong>Сбросить цель пользователя</strong>
+            <small>Вернуть призыв и онбординг цели</small>
+          </span>
+        </button>
       </section>
     </div>
   `;
@@ -563,17 +664,46 @@ function renderPeriodStat(label, gamesCount, points, minutes) {
   `;
 }
 
-function renderAchievement(item) {
+function groupAchievements(achievements) {
+  const groups = [];
+  achievements.forEach((item) => {
+    const title = item.series || 'Достижения';
+    let group = groups.find((entry) => entry.title === title);
+    if (!group) {
+      group = { title, items: [] };
+      groups.push(group);
+    }
+    group.items.push(item);
+  });
+  return groups;
+}
+
+function renderAchievementSeries(series) {
+  const unlocked = series.items.filter((item) => item.unlocked).length;
   return `
-    <article class="progress-achievement-card ${item.unlocked ? 'is-earned' : ''}">
-      <div>
-        <span>${escapeHtml(item.icon || '🏆')}</span>
-        <small>${escapeHtml(item.unlocked ? `${item.rarity || 'Получено'} · ${item.date || 'сегодня'}` : item.status || 'Достижение')}</small>
+    <section class="achievement-series-card">
+      <div class="achievement-series-header">
+        <div>
+          <h2>${escapeHtml(series.title)}</h2>
+        </div>
+        <strong>${unlocked}/${series.items.length}</strong>
       </div>
+      <div class="achievement-trophy-grid">
+        ${series.items.map(renderAchievement).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function renderAchievement(item) {
+  const isImageIcon = typeof item.icon === 'string' && /\.(svg|png|jpe?g|webp)$/i.test(item.icon);
+  return `
+    <button class="achievement-trophy ${item.unlocked ? 'is-earned' : 'is-locked'}" type="button" data-action="achievement-detail" data-id="${escapeAttr(item.id || item.title)}">
+      <span class="achievement-medal">
+        ${isImageIcon ? `<img src="${escapeAttr(item.icon)}" alt="">` : `<b>${escapeHtml(item.icon || '🏆')}</b>`}
+      </span>
       <strong>${escapeHtml(item.title)}</strong>
-      <p>${escapeHtml(item.text)}</p>
-      <i><b style="width:${Math.max(0, Math.min(100, Number(item.progress || 0)))}%"></b></i>
-    </article>
+    </button>
   `;
 }
 
