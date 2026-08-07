@@ -1,4 +1,4 @@
-const CACHE_NAME = "score-play-mob-v20260807-app-icon";
+const CACHE_NAME = "score-play-mob-v20260807-preloader";
 
 const APP_SHELL = [
   "./",
@@ -14,8 +14,17 @@ const APP_SHELL = [
   "./icons/games.png",
   "./icons/profile.png",
   "./icons/notifications.png",
+  "../assets/logo-objects/object-1.svg",
+  "../assets/logo-objects/object-2.svg",
+  "../assets/logo-objects/object-3.svg",
+  "../assets/logo-objects/object-4.svg",
+  "../assets/logo-objects/object-5.svg",
   "./assets/promo/optimized/showcase-create-game.jpg",
+  "./assets/promo/optimized/showcase-gift-game-v2.jpg",
+  "./assets/promo/optimized/showcase-team.jpg",
+  "./assets/promo/optimized/showcase-venues.jpg",
   "./assets/activity/optimized/goal-onboarding-v2.jpg",
+  "./assets/activity/goal-flag-3d.png",
   "./assets/fonts/Raleway-VariableFont_wght.ttf",
   "./assets/fonts/Raleway-Italic-VariableFont_wght.ttf"
 ];

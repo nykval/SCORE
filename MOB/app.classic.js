@@ -2825,6 +2825,7 @@ const screenTitles = {
 };
 
 const dom = {
+  appLoader: document.querySelector('#app-loader'),
   loginScreen: document.querySelector('#login-screen'),
   loginForm: document.querySelector('#login-form'),
   loginInput: document.querySelector('#login-input'),
@@ -2848,16 +2849,47 @@ const dom = {
 const state = hydrateState();
 const SHEET_CLOSE_ANIMATION_MS = 320;
 const PROMO_CAROUSEL_RUN_DELAYS_MS = [5000, 7000, 10000];
+const APP_PRELOAD_MIN_MS = 1400;
+const APP_PRELOAD_TIMEOUT_MS = 5200;
+const APP_PRELOAD_ASSETS = [
+  '../assets/logo-objects/object-1.svg',
+  '../assets/logo-objects/object-2.svg',
+  '../assets/logo-objects/object-3.svg',
+  '../assets/logo-objects/object-4.svg',
+  '../assets/logo-objects/object-5.svg',
+  './assets/promo/optimized/showcase-create-game.jpg',
+  './assets/promo/optimized/showcase-gift-game-v2.jpg',
+  './assets/promo/optimized/showcase-team.jpg',
+  './assets/promo/optimized/showcase-venues.jpg',
+  './assets/activity/optimized/goal-onboarding-v2.jpg',
+  './assets/activity/goal-flag-3d.png',
+  './icons/home.png',
+  './icons/venues.png',
+  './icons/games.png',
+  './icons/profile.png',
+  './icons/notifications.png',
+  './icons/app-icon-192.png',
+  './icons/buicons/football.png',
+  './icons/buicons/basketball.png',
+  './icons/buicons/volleyball.png',
+  './icons/buicons/tennis.png',
+  './icons/buicons/hockey.png'
+];
 let sheetCloseTimer = 0;
 let promoCarouselTimer = 0;
 let venueFilterDraft = null;
 let suppressSheetClick = false;
 let activityGoalDraftTarget = 180;
+let appPreloadPromise = null;
+let appPreloadStartedAt = Date.now();
+let isAppLoaderHidden = false;
 
 init();
 
 function init() {
   initTelegramViewport();
+  appPreloadStartedAt = Date.now();
+  appPreloadPromise = preloadAppAssets();
 
   bindLogin();
   bindNavigation();
@@ -2866,7 +2898,53 @@ function init() {
 
   if (state.authorized) {
     showApp();
+  } else {
+    finishAppPreload();
   }
+}
+
+function preloadAppAssets() {
+  const imagePromises = APP_PRELOAD_ASSETS.map((src) => preloadImage(src));
+  const fontPromises = document.fonts
+    ? [
+        document.fonts.load('700 16px Raleway'),
+        document.fonts.load('900 32px Raleway')
+      ].map((promise) => promise.catch(() => null))
+    : [];
+  return Promise.allSettled([...imagePromises, ...fontPromises]);
+}
+
+function preloadImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    const timer = window.setTimeout(resolve, APP_PRELOAD_TIMEOUT_MS);
+    image.decoding = 'async';
+    image.onload = image.onerror = () => {
+      window.clearTimeout(timer);
+      resolve();
+    };
+    image.src = src;
+  });
+}
+
+function finishAppPreload() {
+  if (isAppLoaderHidden) return;
+  const waitForMinimum = new Promise((resolve) => {
+    const elapsed = Date.now() - appPreloadStartedAt;
+    window.setTimeout(resolve, Math.max(0, APP_PRELOAD_MIN_MS - elapsed));
+  });
+
+  Promise.allSettled([appPreloadPromise || Promise.resolve(), waitForMinimum]).then(hideAppLoader);
+}
+
+function hideAppLoader() {
+  if (isAppLoaderHidden) return;
+  isAppLoaderHidden = true;
+  if (!dom.appLoader) return;
+  dom.appLoader.classList.add('is-leaving');
+  window.setTimeout(() => {
+    dom.appLoader.hidden = true;
+  }, 420);
 }
 
 function initTelegramViewport() {
@@ -3503,6 +3581,7 @@ function showApp() {
   dom.loginScreen.hidden = true;
   dom.mobileApp.hidden = false;
   renderApp();
+  finishAppPreload();
 }
 
 function logout() {
