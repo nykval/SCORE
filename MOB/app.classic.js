@@ -2271,6 +2271,7 @@ function renderPromoCarousel() {
       <div class="home-promo-track">
         ${slides.map((slide, index) => `
           <article class="home-promo-card" aria-label="${escapeAttr(slide.title)}" data-promo-image="${escapeAttr(slide.image)}"${index === 0 ? ` style="--promo-image:url('${escapeAttr(slide.image)}')"` : ''}>
+            <img class="home-promo-image" src="${escapeAttr(slide.image)}" alt="" aria-hidden="true" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">
             <button class="home-promo-cta" type="button" data-action="promo-unavailable">${escapeHtml(slide.cta)} <i aria-hidden="true">→</i></button>
           </article>
         `).join('')}
@@ -2323,27 +2324,15 @@ function renderActivityGoal({ stats, goal }) {
   const completed = Math.max(0, Number(stats?.week?.minutes || 0));
   const target = Math.max(1, Number(goal?.targetMinutes || 300));
   const progress = Math.min(100, Math.round((completed / target) * 100));
-  const remaining = Math.max(0, target - completed);
-  const activeDays = Math.min(7, Math.max(0, Number(stats?.week?.games || 0)));
-  const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-  const title = remaining > 0 ? `Ещё ${formatNumber(remaining)} минут до цели` : 'Недельная цель выполнена';
-  const pace = progress >= 100 ? 'Можно поставить новую планку' : progress >= 70 ? 'Финиш уже близко' : 'Каждая игра приближает к цели';
+  const title = progress >= 100 ? 'Цель выполнена' : 'Продолжай в том же духе';
 
   return `
     <section class="home-activity-goal" aria-label="Цель активности">
       <button class="activity-goal-card" type="button" data-action="open-activity-goal" aria-label="Открыть цель активности">
-        <span class="activity-goal-ring" style="--goal-progress:${progress}%">
-          <strong>${progress}%</strong>
-          <small>готово</small>
-        </span>
+        <span class="activity-goal-ring" style="--goal-progress:${progress}%"></span>
         <span class="activity-goal-copy">
-          <small>${formatNumber(completed)} из ${formatNumber(target)} минут</small>
-          <strong>${title}</strong>
-          <span>${pace}</span>
-        </span>
-        <i class="activity-goal-arrow" aria-hidden="true">→</i>
-        <span class="activity-goal-week" aria-label="Активных дней за неделю: ${activeDays}">
-          ${days.map((day, index) => `<span class="${index < activeDays ? 'is-active' : ''}"><i></i>${day}</span>`).join('')}
+          <strong>${formatNumber(completed)} / ${formatNumber(target)} мин</strong>
+          <span>${title}</span>
         </span>
       </button>
     </section>
@@ -2851,6 +2840,8 @@ const SHEET_CLOSE_ANIMATION_MS = 320;
 const PROMO_CAROUSEL_RUN_DELAYS_MS = [5000, 7000, 10000];
 const APP_PRELOAD_MIN_MS = 1400;
 const APP_PRELOAD_TIMEOUT_MS = 5200;
+const APP_LOADER_MIN_STEP_MS = 190;
+const APP_LOADER_MAX_STEP_MS = 760;
 const APP_PRELOAD_ASSETS = [
   '../assets/logo-objects/object-1.svg',
   '../assets/logo-objects/object-2.svg',
@@ -2883,6 +2874,12 @@ let activityGoalDraftTarget = 180;
 let appPreloadPromise = null;
 let appPreloadStartedAt = Date.now();
 let isAppLoaderHidden = false;
+let appLoaderTimer = 0;
+let appLoaderLoadedCount = 0;
+let appLoaderTotalCount = 0;
+let appLoaderCurrentIndex = 0;
+let appLoaderAllObjectsResolve = null;
+const appLoaderShownIndexes = new Set([0]);
 
 init();
 
@@ -2904,13 +2901,17 @@ function init() {
 }
 
 function preloadAppAssets() {
-  const imagePromises = APP_PRELOAD_ASSETS.map((src) => preloadImage(src));
-  const fontPromises = document.fonts
+  const fontLoaders = document.fonts
     ? [
-        document.fonts.load('700 16px Raleway'),
-        document.fonts.load('900 32px Raleway')
-      ].map((promise) => promise.catch(() => null))
+        () => document.fonts.load('700 16px Raleway'),
+        () => document.fonts.load('900 32px Raleway')
+      ]
     : [];
+  appLoaderTotalCount = APP_PRELOAD_ASSETS.length + fontLoaders.length;
+  setAppLoaderObject(0);
+  scheduleAppLoaderTick();
+  const imagePromises = APP_PRELOAD_ASSETS.map((src) => preloadImage(src).then(registerAppPreloadProgress));
+  const fontPromises = fontLoaders.map((loadFont) => loadFont().catch(() => null).then(registerAppPreloadProgress));
   return Promise.allSettled([...imagePromises, ...fontPromises]);
 }
 
@@ -2934,17 +2935,72 @@ function finishAppPreload() {
     window.setTimeout(resolve, Math.max(0, APP_PRELOAD_MIN_MS - elapsed));
   });
 
-  Promise.allSettled([appPreloadPromise || Promise.resolve(), waitForMinimum]).then(hideAppLoader);
+  Promise.allSettled([appPreloadPromise || Promise.resolve(), waitForMinimum, waitForAllAppLoaderObjects()]).then(hideAppLoader);
 }
 
 function hideAppLoader() {
   if (isAppLoaderHidden) return;
   isAppLoaderHidden = true;
+  window.clearTimeout(appLoaderTimer);
   if (!dom.appLoader) return;
   dom.appLoader.classList.add('is-leaving');
   window.setTimeout(() => {
     dom.appLoader.hidden = true;
   }, 420);
+}
+
+function registerAppPreloadProgress() {
+  appLoaderLoadedCount += 1;
+  scheduleAppLoaderTick(true);
+}
+
+function getAppLoaderStepDelay() {
+  const progress = appLoaderTotalCount > 0 ? appLoaderLoadedCount / appLoaderTotalCount : 0;
+  return Math.round(APP_LOADER_MAX_STEP_MS - (APP_LOADER_MAX_STEP_MS - APP_LOADER_MIN_STEP_MS) * Math.min(1, progress));
+}
+
+function scheduleAppLoaderTick(reset = false) {
+  if (isAppLoaderHidden) return;
+  if (reset) window.clearTimeout(appLoaderTimer);
+  if (appLoaderTimer && !reset) return;
+  appLoaderTimer = window.setTimeout(() => {
+    appLoaderTimer = 0;
+    advanceAppLoaderObject();
+    scheduleAppLoaderTick();
+  }, getAppLoaderStepDelay());
+}
+
+function advanceAppLoaderObject() {
+  const images = getAppLoaderImages();
+  if (!images.length) return;
+  appLoaderCurrentIndex = (appLoaderCurrentIndex + 1) % images.length;
+  setAppLoaderObject(appLoaderCurrentIndex);
+}
+
+function setAppLoaderObject(index) {
+  const images = getAppLoaderImages();
+  if (!images.length) return;
+  images.forEach((image, imageIndex) => {
+    image.classList.toggle('is-active', imageIndex === index);
+  });
+  appLoaderShownIndexes.add(index);
+  if (appLoaderShownIndexes.size >= images.length && appLoaderAllObjectsResolve) {
+    appLoaderAllObjectsResolve();
+    appLoaderAllObjectsResolve = null;
+  }
+}
+
+function getAppLoaderImages() {
+  return Array.from(dom.appLoader?.querySelectorAll('.app-loader-object img') || []);
+}
+
+function waitForAllAppLoaderObjects() {
+  const images = getAppLoaderImages();
+  if (!images.length || appLoaderShownIndexes.size >= images.length) return Promise.resolve();
+  return new Promise((resolve) => {
+    appLoaderAllObjectsResolve = resolve;
+    scheduleAppLoaderTick(true);
+  });
 }
 
 function initTelegramViewport() {

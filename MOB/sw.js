@@ -1,4 +1,4 @@
-const CACHE_NAME = "score-play-mob-v20260807-preloader";
+const CACHE_NAME = "score-play-mob-v20260807-gift-promo";
 
 const APP_SHELL = [
   "./",

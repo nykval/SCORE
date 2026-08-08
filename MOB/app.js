@@ -42,6 +42,8 @@ const SHEET_CLOSE_ANIMATION_MS = 320;
 const PROMO_CAROUSEL_RUN_DELAYS_MS = [5000, 7000, 10000];
 const APP_PRELOAD_MIN_MS = 1400;
 const APP_PRELOAD_TIMEOUT_MS = 5200;
+const APP_LOADER_MIN_STEP_MS = 190;
+const APP_LOADER_MAX_STEP_MS = 760;
 const APP_PRELOAD_ASSETS = [
   '../assets/logo-objects/object-1.svg',
   '../assets/logo-objects/object-2.svg',
@@ -70,6 +72,12 @@ let activityGoalDraftTarget = 180;
 let appPreloadPromise = null;
 let appPreloadStartedAt = Date.now();
 let isAppLoaderHidden = false;
+let appLoaderTimer = 0;
+let appLoaderLoadedCount = 0;
+let appLoaderTotalCount = 0;
+let appLoaderCurrentIndex = 0;
+let appLoaderAllObjectsResolve = null;
+const appLoaderShownIndexes = new Set([0]);
 
 function sheetHeader(label, title = '', text = '') {
   return `
@@ -103,13 +111,17 @@ function init() {
 }
 
 function preloadAppAssets() {
-  const imagePromises = APP_PRELOAD_ASSETS.map((src) => preloadImage(src));
-  const fontPromises = document.fonts
+  const fontLoaders = document.fonts
     ? [
-        document.fonts.load('700 16px Raleway'),
-        document.fonts.load('900 32px Raleway')
-      ].map((promise) => promise.catch(() => null))
+        () => document.fonts.load('700 16px Raleway'),
+        () => document.fonts.load('900 32px Raleway')
+      ]
     : [];
+  appLoaderTotalCount = APP_PRELOAD_ASSETS.length + fontLoaders.length;
+  setAppLoaderObject(0);
+  scheduleAppLoaderTick();
+  const imagePromises = APP_PRELOAD_ASSETS.map((src) => preloadImage(src).then(registerAppPreloadProgress));
+  const fontPromises = fontLoaders.map((loadFont) => loadFont().catch(() => null).then(registerAppPreloadProgress));
   return Promise.allSettled([...imagePromises, ...fontPromises]);
 }
 
@@ -133,17 +145,72 @@ function finishAppPreload() {
     window.setTimeout(resolve, Math.max(0, APP_PRELOAD_MIN_MS - elapsed));
   });
 
-  Promise.allSettled([appPreloadPromise || Promise.resolve(), waitForMinimum]).then(hideAppLoader);
+  Promise.allSettled([appPreloadPromise || Promise.resolve(), waitForMinimum, waitForAllAppLoaderObjects()]).then(hideAppLoader);
 }
 
 function hideAppLoader() {
   if (isAppLoaderHidden) return;
   isAppLoaderHidden = true;
+  window.clearTimeout(appLoaderTimer);
   if (!dom.appLoader) return;
   dom.appLoader.classList.add('is-leaving');
   window.setTimeout(() => {
     dom.appLoader.hidden = true;
   }, 420);
+}
+
+function registerAppPreloadProgress() {
+  appLoaderLoadedCount += 1;
+  scheduleAppLoaderTick(true);
+}
+
+function getAppLoaderStepDelay() {
+  const progress = appLoaderTotalCount > 0 ? appLoaderLoadedCount / appLoaderTotalCount : 0;
+  return Math.round(APP_LOADER_MAX_STEP_MS - (APP_LOADER_MAX_STEP_MS - APP_LOADER_MIN_STEP_MS) * Math.min(1, progress));
+}
+
+function scheduleAppLoaderTick(reset = false) {
+  if (isAppLoaderHidden) return;
+  if (reset) window.clearTimeout(appLoaderTimer);
+  if (appLoaderTimer && !reset) return;
+  appLoaderTimer = window.setTimeout(() => {
+    appLoaderTimer = 0;
+    advanceAppLoaderObject();
+    scheduleAppLoaderTick();
+  }, getAppLoaderStepDelay());
+}
+
+function advanceAppLoaderObject() {
+  const images = getAppLoaderImages();
+  if (!images.length) return;
+  appLoaderCurrentIndex = (appLoaderCurrentIndex + 1) % images.length;
+  setAppLoaderObject(appLoaderCurrentIndex);
+}
+
+function setAppLoaderObject(index) {
+  const images = getAppLoaderImages();
+  if (!images.length) return;
+  images.forEach((image, imageIndex) => {
+    image.classList.toggle('is-active', imageIndex === index);
+  });
+  appLoaderShownIndexes.add(index);
+  if (appLoaderShownIndexes.size >= images.length && appLoaderAllObjectsResolve) {
+    appLoaderAllObjectsResolve();
+    appLoaderAllObjectsResolve = null;
+  }
+}
+
+function getAppLoaderImages() {
+  return Array.from(dom.appLoader?.querySelectorAll('.app-loader-object img') || []);
+}
+
+function waitForAllAppLoaderObjects() {
+  const images = getAppLoaderImages();
+  if (!images.length || appLoaderShownIndexes.size >= images.length) return Promise.resolve();
+  return new Promise((resolve) => {
+    appLoaderAllObjectsResolve = resolve;
+    scheduleAppLoaderTick(true);
+  });
 }
 
 function initTelegramViewport() {

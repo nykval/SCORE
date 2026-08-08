@@ -108,6 +108,7 @@ function renderPromoCarousel() {
       <div class="home-promo-track">
         ${slides.map((slide, index) => `
           <article class="home-promo-card" aria-label="${escapeAttr(slide.title)}" data-promo-image="${escapeAttr(slide.image)}"${index === 0 ? ` style="--promo-image:url('${escapeAttr(slide.image)}')"` : ''}>
+            <img class="home-promo-image" src="${escapeAttr(slide.image)}" alt="" aria-hidden="true" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">
             <button class="home-promo-cta" type="button" data-action="promo-unavailable">${escapeHtml(slide.cta)} <i aria-hidden="true">→</i></button>
           </article>
         `).join('')}
@@ -160,27 +161,15 @@ function renderActivityGoal({ stats, goal }) {
   const completed = Math.max(0, Number(stats?.week?.minutes || 0));
   const target = Math.max(1, Number(goal?.targetMinutes || 300));
   const progress = Math.min(100, Math.round((completed / target) * 100));
-  const remaining = Math.max(0, target - completed);
-  const activeDays = Math.min(7, Math.max(0, Number(stats?.week?.games || 0)));
-  const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-  const title = remaining > 0 ? `Ещё ${formatNumber(remaining)} минут до цели` : 'Недельная цель выполнена';
-  const pace = progress >= 100 ? 'Можно поставить новую планку' : progress >= 70 ? 'Финиш уже близко' : 'Каждая игра приближает к цели';
+  const title = progress >= 100 ? 'Цель выполнена' : 'Продолжай в том же духе';
 
   return `
     <section class="home-activity-goal" aria-label="Цель активности">
       <button class="activity-goal-card" type="button" data-action="open-activity-goal" aria-label="Открыть цель активности">
-        <span class="activity-goal-ring" style="--goal-progress:${progress}%">
-          <strong>${progress}%</strong>
-          <small>готово</small>
-        </span>
+        <span class="activity-goal-ring" style="--goal-progress:${progress}%"></span>
         <span class="activity-goal-copy">
-          <small>${formatNumber(completed)} из ${formatNumber(target)} минут</small>
-          <strong>${title}</strong>
-          <span>${pace}</span>
-        </span>
-        <i class="activity-goal-arrow" aria-hidden="true">→</i>
-        <span class="activity-goal-week" aria-label="Активных дней за неделю: ${activeDays}">
-          ${days.map((day, index) => `<span class="${index < activeDays ? 'is-active' : ''}"><i></i>${day}</span>`).join('')}
+          <strong>${formatNumber(completed)} / ${formatNumber(target)} мин</strong>
+          <span>${title}</span>
         </span>
       </button>
     </section>
